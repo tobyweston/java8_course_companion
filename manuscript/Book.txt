@@ -1,6 +1,9 @@
-frontmatter:
-frontmatter/release.md
-
 mainmatter:
 
-course.md
+00_introduction/00_course.md
+00_introduction/01_companion.md
+
+01_lambdas_introduction/00_introduction.md
+01_lambdas_introduction/01_lambdas_in_functional_programming.md
+01_lambdas_introduction/02_functions_vs_classes.md
+01_lambdas_introduction/03_basic_syntax.md
