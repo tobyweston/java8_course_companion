@@ -1,1 +1,7 @@
-chapter1.txt
+frontmatter:
+frontmatter/release.md
+
+mainmatter:
+
+01. Introduction/course.md
+01. Introduction/companion.md
