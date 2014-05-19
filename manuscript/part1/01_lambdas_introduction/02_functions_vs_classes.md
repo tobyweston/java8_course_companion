@@ -119,4 +119,4 @@ Functions in the academic sense are very different things from anonymous classes
 
 When we take a look at the new lambda syntax next, remember that although lambdas are used in a very similar way to anonymous classes in Java, they are technically different. Lambdas in Java need not be instantiated every time they're evaluated unlike an instance of an anonymous class.
 
-This should serve to remind you that lambdas in Java 8 are **not** just syntactic sugar. 
+This should serve to remind you that lambdas in Java 8 are **not** just syntactic sugar.
