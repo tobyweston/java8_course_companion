@@ -109,7 +109,7 @@ This expression to "close over" comes from the idea that a lambda expression wit
 We've seen a closure being used to provide an anonymous block of functionality and the difference between an equivalent lambda _but_, there are still more useful distinctions we can make.
 
 
-## Other Differences
+### Other Differences
 
 For example, an anonymous function, is a function literal without a name, whilst a closure is an instance of a function. By definition, a lambda has no instance variables; it's not an instance. It's variables are supplied as arguments. A closure however, has instance's variables which are provided when the instance is created.
 
@@ -119,7 +119,7 @@ All the issues we looked at in the functions vs classes section are relevant her
 
 
 
-## Summary
+### Summary
 
 
 We've talked about a lot here so lets summarise the differences briefly before finishing.
@@ -141,7 +141,7 @@ Take a look at this example. The `server` variable has to be closed over by the 
 
 
 
-## Notes
+### Notes
 
 Break conditions?
 

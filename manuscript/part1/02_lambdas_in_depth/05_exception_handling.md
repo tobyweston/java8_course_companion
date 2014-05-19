@@ -114,7 +114,7 @@ Getting back to the point...
 Let's look at exception handling from the two perspectives in turn. First we'll look at dealing with exceptions when writing lambdas, then we'll look at dealing with exceptions when calling lambdas.
 
 
-## As an Author (Dealing with Exceptions When Writing Lambdas)
+### As an Author (Dealing with Exceptions When Writing Lambdas)
 
 To start with, lets look at it as if we wanted to implement the transfer method using lambdas but this time wanted to reuse an existing library that supplies the `runInSequence` method.
 
@@ -212,7 +212,7 @@ It's certainly the case that lambdas offer more concise representations for smal
 [blog fodder - It seems to me we can't easily have exception transparency whilst we have checked exceptions in Java. The JDK boys would have to jump through hoops to enable it where the fundamental tension is with checked exceptions. If we had only unchecked exceptions, exception handling in lambdas would be inherently transparent.]
 
 
-## As a Caller (Dealing with Exceptions when Calling Lambdas)
+### As a Caller (Dealing with Exceptions when Calling Lambdas)
 
 Ok, so we've seen things from the perspective of writing lambdas, now lets have a look at things when calling lambdas.
 
@@ -282,7 +282,7 @@ You can't rely on the exception handler being called when it's convenient for yo
 Looking at the two alternatives side by side should give you a feel for how they differ. The original version forces the client to deal with the exception directly (via a throws clause on the functional interface). Whereas the callback version, although running in a thread, handles the exception, providing a callback via a client lambda.
 
 
-## Old Text
+### Old Text
 
 Exception transparency describes the problem of how to handle exceptions thrown within a closure in the calling code. A closure throwing an exception may not be obvious or _transparent_ to the calling code. For example [make example up].
 
@@ -291,7 +291,7 @@ Java's solution is to rely on checked exceptions and force any calling code to d
 This means that either a) you're functional interface methods have to throw exceptions explicitly or b) you catch and rethrow as `RuntimeException`. The later is not a fix. Another alternative is a callback. When you consider that lambdas could be run in parallell you can see how bad it can get... [example?].
 
 
-## Notes
+### Notes
 
 (from [this post](http://www.techempower.com/blog/2013/03/26/everything-about-java-8/))
 

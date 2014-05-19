@@ -94,7 +94,7 @@ It's the `calculate` method that gives the final hint. The compiler can use it t
 We're going to come across lots of examples of target typing as we go on so I'm not going to say much more on this. Just be aware that the mechanism Java uses to achieve lots of the lambda goodness relies on improvements to type inference and this idea of a "target" type.
 
 
-## Type parameters in method calls
+### Type parameters in method calls
 
 The were some situations prior to Java 8 where the compiler couldn't infer types. One of these was when calling methods with generics type parameters as arguments.
 
@@ -143,7 +143,7 @@ Our example of calling the `processNames` now compiles!
 
 
 
-## Type parameters in chained method calls
+### Type parameters in chained method calls
 
 Another common problem with type inference is when methods are chained together. Lets suppose we have a `List` class,
 

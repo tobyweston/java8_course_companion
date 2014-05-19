@@ -114,7 +114,7 @@ It's a bit confusing as to the difference but it's about how you want to use the
 Firstly then, lets have a look at constrictor references.
 
 
-#### Constructor reference
+### Constructor reference
 
 The basic syntax looks like this,
 
@@ -270,7 +270,7 @@ So there we go. Calling multiple argument constructors via constructor reference
 [end-demo]
 
 
-#### Static method reference
+### Static method reference
 
 A method reference can point directly to a static method.
 
@@ -302,7 +302,7 @@ where, the static method `ascending` might be defined like this.
 
 
 
-#### Instance method reference of particular object (in this case, a closure)
+### Instance method reference of particular object (in this case, a closure)
 
 Here's an example of an instance method reference of a specific instance.
 
@@ -371,7 +371,7 @@ All three of these are equivalent. Compare this to the lambda variation of an in
 [end-demo]
 
 
-#### Instance method reference of a arbitrary object who's instance is supplied later (lambda)
+### Instance method reference of a arbitrary object who's instance is supplied later (lambda)
 
 The last case is for a method reference that points to an arbitrary object referred to by its type.
 
@@ -425,7 +425,7 @@ If you expand it fully to an anonymous interface, it looks like this. The `x` pa
 
 
 
-#### Summary
+### Summary
 
 Let's have a look at the summary of the syntax for the four types of method reference.
 
@@ -437,7 +437,3 @@ You can think of the whole thing as a transformation from a method reference to 
 [transformation ( method\,reference , target\,typing ) \rightarrow \lambda](http://www.codecogs.com/latex/eqneditor.php)
 
 
-
-#### Extended Example
-
-http://java.amitph.com/2012/08/at-first-sight-with-closures-in-java.html

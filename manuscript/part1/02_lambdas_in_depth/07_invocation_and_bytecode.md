@@ -9,7 +9,7 @@ Then we'll look at both anonymous classes and lambdas when they capture variable
 We'll compare pre-Java 8 closures with lambdas and explore how lambdas are _not_ just syntactic sugar but produce very different bytecode from the traditional approaches.
 
 
-## Recap
+### Bytecode Recap
 
 To start with then, let's recap on what we know about bytecode.
 
@@ -76,7 +76,7 @@ The last group is about arithmetic, logic and type conversion and includes codes
 | Arithmetic, logic and type conversion       | `iadd`, `fcmpl`, `i2b`
 
 
-## Descriptors
+### Descriptors
 
 Opcodes will often use parameters, these look a little cryptic in the bytecode as they usually referenced via lookup tables. Internally, Java uses what's called "descriptors" to describe these.
 
@@ -119,7 +119,7 @@ and we're done. A JVM method descriptor.
 
 
 
-## Static vs Dynamic Typing
+### Static vs Dynamic Typing
 
 Most of the JVM invocation opcodes are statically typed; they check the method signature types at compile time.
 

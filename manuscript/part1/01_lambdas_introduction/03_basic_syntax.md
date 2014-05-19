@@ -117,7 +117,7 @@ can be written without the brackets
 
 
 
-## Summary
+### Summary
 
 Let's recap with a summary of the syntax options.
 

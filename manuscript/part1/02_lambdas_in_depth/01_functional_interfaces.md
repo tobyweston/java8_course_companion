@@ -4,7 +4,7 @@ Java 8 treats lambdas as an instance of an interface type. It formalises this in
 
 
 
-## @FunctionalInterface
+### @FunctionalInterface
 
 Oracle have introduced a new annotation `@FunctionalInterface` to mark an interface as such. It's basically to communicate intent but also allows the compiler to do some additional checks.
 
@@ -35,7 +35,7 @@ So what if we try and add a second method to the interface?
 The compiler will error again, this time with a message along the lines of "multiple, non-overriding abstract methods were found". Functional interfaces can have only **one** method.
 
 
-## Extension
+### Extension
 
 What about the case of an interfaces that extends another interfaces?
 
@@ -101,7 +101,7 @@ You can't add a new abstract method to the extending interface though, as the re
 In both cases, you can override methods from `Object` without causing problems. You can also add default methods (also new to Java 8). As you'd probably expect, it doesn't make sense to try and mark an abstract class as a functional interface.
 
 
-## ???
+### ???
 
 Interfaces generally have had some new features added. We'll look at those in detail in Part 2, but just so that you're aware they include.
 
@@ -110,7 +110,7 @@ Interfaces generally have had some new features added. We'll look at those in de
  * and a bunch of new functional interfaces in the `java.util.function` package; things like `Function` and `Predicate`
 
 
-## Summary
+### Summary
 
 
 To recap then, in this section we've talked about how any interface with a single method is now a "functional interface".

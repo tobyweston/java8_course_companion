@@ -5,7 +5,7 @@ Bear in mind that an anonymous _function_ isn't the same as an anonymous _class_
 A _function_ on the other hand has no instance associated with it. Functions are disassociated with the data they act on whereas an object is intimately associated with the data it acts upon.
 
 
-## Lambdas in Java 8
+### Lambdas in Java 8
 
 You can use lambdas in Java 8 anywhere you would have previously used a [single method interface](???functional interfaces????) so it may just look like syntactic sugar but it's not. Let's have a look at how they differ and compare anonymous classes to lambdas; classes vs. functions.
 
@@ -44,7 +44,7 @@ class WaitFor {
 {% endcodeblock %}
 
 
-## Some Theoretical Differences
+### Some Theoretical Differences
 
 Firstly, both implementations are in-fact closures, the later is also a lambda. We'll look at this distinction in more detail later in the [lambdas vs. closures](???) section. This means that both have to capture their "environment" at runtime. In Java pre-8, this means copying the things the closure needs into an instance of an class (an anonymous instances of `Condition`). In our example, the `server` variable.
 
@@ -68,9 +68,9 @@ In terms of some conceptual differences then;
 * Static class methods in Java are roughly equivalent to functions.
 
 
-## Some Concrete Differences
+### Some Concrete Differences
 
-### Capture Semantics
+#### Capture Semantics
 
 Another difference is around capture semantics for `this`. In an anonymous class, `this` refers to the instance of the anonymous class. For example, `Foo$InnerClass` and not `Foo`. That's why you have crazy syntax like `Foo.this.x` when you refer to the enclosing scope from the anonymous class.
 
@@ -113,7 +113,7 @@ public class Example {
 Shadowing also becomes much more straight forward to reason about (when referencing shadowed variables).
 
 
-## Summary
+### Summary
 
 Functions in the academic sense are very different things from anonymous classes (which we often treat like functions in Java pre-8). It's useful to keep the distinctions in your head to be able to justify the use of Java 8 lambdas for something more than just their concise syntax. Of course, there's lots of additional advantages in using lambdas (not least the retrofit of the JDK to heavily use them).
 
