@@ -3,8 +3,9 @@ frontmatter/about.md
 
 mainmatter:
 
-part1/00_introduction/00_course.md
-part1/00_introduction/01_companion.md
+part1/00_introduction/00_about_the_course.md
+part1/00_introduction/02_registration.md
+part1/00_introduction/03_whats_new.md
 
 part1/01_lambdas_introduction/00_introduction.md
 part1/01_lambdas_introduction/01_lambdas_in_functional_programming.md
