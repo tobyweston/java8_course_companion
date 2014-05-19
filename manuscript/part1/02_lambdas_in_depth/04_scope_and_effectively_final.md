@@ -1,5 +1,3 @@
-# λ In-depth
-
 ## Scope & Effectively Final
 
 ### Scoping

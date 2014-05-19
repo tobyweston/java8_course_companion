@@ -1,8 +1,7 @@
-# λ In-depth
-
-The terms closure and lambda are often used interchangeably but they are actually distinct. In this section we'll take a look at the differences so you can be clear about which is which.
 
 ## Lambdas vs Closures
+
+The terms closure and lambda are often used interchangeably but they are actually distinct. In this section we'll take a look at the differences so you can be clear about which is which.
 
 Here's a table showing the release dates for each major version of Java. Java 5.0 came along in 2004 and included the first major language changes including things like generics support.
 

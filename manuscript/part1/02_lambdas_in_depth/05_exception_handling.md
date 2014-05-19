@@ -1,5 +1,3 @@
-# λ In-depth
-
 ## Exception Handling
 
 There's no new syntax for exception handling in lambdas. Exceptions thrown in a lambda are propagated to the caller, just as you'd expect with a regular method call. There's nothing special about calling lambdas or handling their exceptions.

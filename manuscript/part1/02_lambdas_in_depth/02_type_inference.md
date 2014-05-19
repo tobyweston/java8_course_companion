@@ -1,5 +1,3 @@
-# λ In-depth
-
 ## Type Inference Improvements
 
 There have been several type inference improvements in Java 8. Firstly to be able to support lambdas, the way the compiler infers things has been beefed up to use "target typing" extensively and secondly, specific improvements were made over Java 7. These were managed under the Open JDK Enhancement Proposal 101.

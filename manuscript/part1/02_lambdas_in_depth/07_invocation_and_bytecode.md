@@ -1,5 +1,3 @@
-# λ In-depth
-
 ## Invocation & Bytecode
 
 In this section we'll explore how the compiler output differs when you compile anonymous classes to when you compile lambdas.

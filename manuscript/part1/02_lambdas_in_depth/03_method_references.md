@@ -1,10 +1,3 @@
-# λ In-depth
-
-## Links
-
-[Article I refer to in my blog post](http://java.amitph.com/2012/08/at-first-sight-with-closures-in-java.html)
-[Nice write up](http://blog.informatech.cr/2013/03/15/java-lambda-expressions-vs-method-references/)
-[Another write up](http://javapapers.com/core-java/java-method-reference/)
 
 ## Method References
 
