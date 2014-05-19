@@ -1,4 +1,4 @@
-# λ In-depth
+-# λ In-depth
 
 ## Section Introduction
 
