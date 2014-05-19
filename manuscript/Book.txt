@@ -3,18 +3,18 @@ frontmatter/about.md
 
 mainmatter:
 
-00_introduction/00_course.md
-00_introduction/01_companion.md
+part1/00_introduction/00_course.md
+part1/00_introduction/01_companion.md
 
-01_lambdas_introduction/00_introduction.md
-01_lambdas_introduction/01_lambdas_in_functional_programming.md
-01_lambdas_introduction/02_functions_vs_classes.md
-01_lambdas_introduction/03_basic_syntax.md
+part1/01_lambdas_introduction/00_introduction.md
+part1/01_lambdas_introduction/01_lambdas_in_functional_programming.md
+part1/01_lambdas_introduction/02_functions_vs_classes.md
+part1/01_lambdas_introduction/03_basic_syntax.md
 
-02_lambdas_in_depth/00_introduction.md
-02_lambdas_in_depth/01_functional_interfaces.md
-02_lambdas_in_depth/02_type_inference.md
-02_lambdas_in_depth/03_method_references.md
-02_lambdas_in_depth/04_scope_and_effectively_final.md
-02_lambdas_in_depth/05_exception_handling.md
-02_lambdas_in_depth/06_lambdas_vs_closures.md
+part1/02_lambdas_in_depth/00_introduction.md
+part1/02_lambdas_in_depth/01_functional_interfaces.md
+part1/02_lambdas_in_depth/02_type_inference.md
+part1/02_lambdas_in_depth/03_method_references.md
+part1/02_lambdas_in_depth/04_scope_and_effectively_final.md
+part1/02_lambdas_in_depth/05_exception_handling.md
+part1/02_lambdas_in_depth/06_lambdas_vs_closures.md
