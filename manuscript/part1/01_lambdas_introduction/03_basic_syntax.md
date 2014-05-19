@@ -32,7 +32,7 @@ If we were to extract a variable for the lambda (the second parameter), it's typ
 Because `Comparator` has only a single abstract method on it; `compareTo`, the compiler can piece together that when we have an anonymous block like this, we really mean an instance of `Comparator`.  It can do this thanks to a couple of the other new features that we'll talk about later; functional interfaces and improvements to type inference.
 
 
-## Syntax Breakdown
+### Syntax Breakdown
 
 You can always convert from using a single abstract method to a using lambda.
 
