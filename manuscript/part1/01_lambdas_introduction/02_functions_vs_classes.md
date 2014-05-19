@@ -11,37 +11,31 @@ You can use lambdas in Java 8 anywhere you would have previously used a [single 
 
 A typical implementation of an anonymous class (a single method interface) in Java pre-8, might look something like this. The `anonymousClass` method is calling the `waitFor` method passing in some implementation of `Condition`, in this case it's saying wait for some server to have shutdown.
 
-{% codeblock lang:java %}
-void anonymousClass() {
-    final Server server = new HttpServer();
-    waitFor(new Condition() {
-        @Override
-        public Boolean isSatisfied() {
-            return !server.isRunning();
-        }
-    });
-}
-{% endcodeblock %}
+    void anonymousClass() {
+        final Server server = new HttpServer();
+        waitFor(new Condition() {
+            @Override
+            public Boolean isSatisfied() {
+                return !server.isRunning();
+            }
+        });
+    }
 
 The functionally equivalent lambda would look like this.
 
-{% codeblock lang:java %}
-void closure() {
-    Server server = new HttpServer();
-    waitFor(() -> !server.isRunning());
-}
-{% endcodeblock %}
+    void closure() {
+        Server server = new HttpServer();
+        waitFor(() -> !server.isRunning());
+    }
 
 Where in the interest of completeness, a naive polling `waitFor` method might look like this.
 
-{% codeblock lang:java %}
-class WaitFor {
-	static void waitFor(Condition condition) throws InterruptedException {
-		while (!condition.isSatisfied())
-			Thread.sleep(250);
-	}
-}
-{% endcodeblock %}
+    class WaitFor {
+        static void waitFor(Condition condition) throws InterruptedException {
+            while (!condition.isSatisfied())
+                Thread.sleep(250);
+        }
+    }
 
 
 ### Some Theoretical Differences
@@ -78,36 +72,32 @@ In lambdas on the other hand, `this` refers to the enclosing scope (`Foo` direct
 
 For example, this class shows that the lambda can reference the `firstName` variable directly.
 
-{% codeblock lang:java %}
-public class Example {
+    public class Example {
 
-	private String firstName = "Jack";
+        private String firstName = "Jack";
 
-	public void example() {
-		Function<String, String> addSurname = surname -> {
-			return firstName + " " + surname;       // equivalent to this.firstName
-		};
-	}
-}
-{% endcodeblock %}
+        public void example() {
+            Function<String, String> addSurname = surname -> {
+                return firstName + " " + surname;       // equivalent to this.firstName
+            };
+        }
+    }
 
 The anonymous class equivalent would need to explicitly refer to `firstName` from the enclosing scope.
 
-{% codeblock lang:java %}
-public class Example {
+    public class Example {
 
-	private String firstName = "Charlie";
+        private String firstName = "Charlie";
 
-    public void anotherExample() {
-        Function<String, String> addSurname = new Function<String, String>() {
-            @Override
-            public String apply(String surname) {
-                return Example.this.firstName + " " + surname;
-            }
-        };
+        public void anotherExample() {
+            Function<String, String> addSurname = new Function<String, String>() {
+                @Override
+                public String apply(String surname) {
+                    return Example.this.firstName + " " + surname;
+                }
+            };
+        }
     }
-}
-{% endcodeblock %}
 
 
 Shadowing also becomes much more straight forward to reason about (when referencing shadowed variables).
