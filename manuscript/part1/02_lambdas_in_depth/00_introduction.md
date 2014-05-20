@@ -1,7 +1,5 @@
 -# λ In-depth
 
-## Section Introduction
-
 In this section, we'll take a look at things in a little more detail and talk about some related topics, things like
 
   * functional interfaces

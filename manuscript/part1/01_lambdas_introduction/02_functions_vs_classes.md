@@ -11,28 +11,32 @@ You can use lambdas in Java 8 anywhere you would have previously used a [single 
 
 A typical implementation of an anonymous class (a single method interface) in Java pre-8, might look something like this. The `anonymousClass` method is calling the `waitFor` method passing in some implementation of `Condition`, in this case it's saying wait for some server to have shutdown.
 
-{title="Typical usage of an anonymous class", lang="java", line-numbers="off"}
+{title="Typical usage of an anonymous class", lang="java", line-numbers="on"}
 ~~~~~~~
-    void anonymousClass() {
-        final Server server = new HttpServer();
-        waitFor(new Condition() {
-            @Override
-            public Boolean isSatisfied() {
-                return !server.isRunning();
-            }
-        });
-    }
+void anonymousClass() {
+    final Server server = new HttpServer();
+    waitFor(new Condition() {
+        @Override
+        public Boolean isSatisfied() {
+            return !server.isRunning();
+        }
+    });
+}
 ~~~~~~~
 
 The functionally equivalent lambda would look like this.
 
+{title="Equivalent functionality as a lambda", lang="java", line-numbers="on"}
+~~~~~~~
     void closure() {
         Server server = new HttpServer();
         waitFor(() -> !server.isRunning());
     }
+~~~~~~~
 
 Where in the interest of completeness, a naive polling `waitFor` method might look like this.
 
+{linenos=off}
     class WaitFor {
         static void waitFor(Condition condition) throws InterruptedException {
             while (!condition.isSatisfied())
@@ -75,19 +79,22 @@ In lambdas on the other hand, `this` refers to the enclosing scope (`Foo` direct
 
 For example, this class shows that the lambda can reference the `firstName` variable directly.
 
+{linenos=off}
     public class Example {
 
         private String firstName = "Jack";
 
         public void example() {
             Function<String, String> addSurname = surname -> {
-                return firstName + " " + surname;       // equivalent to this.firstName
+                // equivalent to this.firstName
+                return firstName + " " + surname;
             };
         }
     }
 
 The anonymous class equivalent would need to explicitly refer to `firstName` from the enclosing scope.
 
+{linenos=off}
     public class Example {
 
         private String firstName = "Charlie";
@@ -113,3 +120,6 @@ Functions in the academic sense are very different things from anonymous classes
 When we take a look at the new lambda syntax next, remember that although lambdas are used in a very similar way to anonymous classes in Java, they are technically different. Lambdas in Java need not be instantiated every time they're evaluated unlike an instance of an anonymous class.
 
 This should serve to remind you that lambdas in Java 8 are **not** just syntactic sugar.
+
+{pagebreak}
+

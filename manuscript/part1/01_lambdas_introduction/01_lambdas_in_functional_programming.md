@@ -41,3 +41,6 @@ The lambda-calculus and LISP have had a huge influence on functional programming
 In simple terms then, a lambda is just an anonymous function. That's it. Nothing special, it's just a compact way to define a function. Anonymous functions are useful when you want to pass around functionality. For example, passing functionality as a argument to a method.
 
 Many main stream languages already support lambdas including Scala, C#, Objective-C, Ruby, C++(11), Python and many others.
+
+{pagebreak}
+

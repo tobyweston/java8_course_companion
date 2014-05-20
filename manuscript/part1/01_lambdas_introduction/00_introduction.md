@@ -1,7 +1,5 @@
 -# Lambdas Introduction
 
-## Section Introduction
-
 In this section we'll introduce the ideas of lambdas, we'll;
 
  * discuss some background to lambdas and functional programming in general.
