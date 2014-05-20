@@ -1,5 +1,5 @@
 
-## Lambdas vs Closures
+## Lambdas vs Closures {#lambdas_vs_closures}
 
 The terms closure and lambda are often used interchangeably but they are actually distinct. In this section we'll take a look at the differences so you can be clear about which is which.
 
