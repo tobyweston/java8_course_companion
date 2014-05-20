@@ -107,7 +107,7 @@ Firstly then, lets have a look at constrictor references.
 
 {pagebreak}
 
-#### Constructor reference
+### Constructor reference
 
 The basic syntax looks like this,
 
@@ -284,7 +284,7 @@ or inline, like this
 
 {pagebreak}
 
-#### Static method reference
+### Static method reference
 
 A method reference can point directly to a static method.
 
@@ -301,10 +301,10 @@ It's equivalent to this lambda
 
 A more extended example would be where we sort a collection using a reference to a static method on the class `Comparators`.
 
-    Collections.sort(Arrays.asList(54, 12, 14), Comparators::ascending);
+    Collections.sort(Arrays.asList(5, 12, 4), Comparators::ascending);
 
     // equivalent to
-    Collections.sort(Arrays.asList(54, 12, 14), (a, b) -> Comparators.ascending(a, b));
+    Collections.sort(Arrays.asList(5, 12, 4), (a, b) -> Comparators.ascending(a, b));
 
 where, the static method `ascending` might be defined like this.
 
@@ -317,7 +317,7 @@ where, the static method `ascending` might be defined like this.
 
 {pagebreak}
 
-#### Instance method reference of particular object (in this case, a closure)
+### Instance method reference of particular object (in this case, a closure)
 
 Here's an example of an instance method reference of a specific instance.
 
@@ -384,7 +384,7 @@ All three of these are equivalent. Compare this to the lambda variation of an in
 {pagebreak}
 
 
-#### Instance method reference of a arbitrary object who's instance is supplied later (lambda)
+### Instance method reference of a arbitrary object who's instance is supplied later (lambda)
 
 The last case is for a method reference that points to an arbitrary object referred to by its type.
 
@@ -475,6 +475,6 @@ Note that the syntax for a static method reference looks very similar to a refer
 
 You can think of the whole thing as a transformation from a method reference to a lambda. The compiler provides the _transformation_ function that takes a method reference and target typing and can derive a lambda.
 
-![](images/method_ref.png]
+![](images/transformation.png]
 
 
