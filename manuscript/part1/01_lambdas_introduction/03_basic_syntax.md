@@ -8,7 +8,7 @@ For example, if we want to sort an array in Java, we can use the `Arrays.sort` m
 
 It would look something like this.
 
-{linenos=off}
+
     Arrays.sort(numbers, new Comparator<Integer>() {
         @Override
         public int compare(Integer first, Integer second) {
@@ -20,14 +20,14 @@ The `Comparator` instance here is a an abstract piece of the functionality; it m
 
 Using Java's new syntax, you can replace this with a lambda which looks like this
 
-{linenos=off}
+
     Arrays.sort(numbers, (first, second) -> first.compareTo(second));
 
 It's a more succinct way of achieving the same thing. In fact, Java treats this as if it were an instance of the `Comparator` class.
 
 If we were to extract a variable for the lambda (the second parameter), it's type would be `Comparator<Integer>` just like the anonymous instance above.
 
-{linenos=off}
+
     Comparator<Integer> ascending = (first, second) -> first.compareTo(second);
     Arrays.sort(numbers, ascending);
 
@@ -41,7 +41,7 @@ You can always convert from using a single abstract method to a using lambda.
 
 Let's say we have an an interface `Example` with a method `apply`, returning some type and taking some argument
 
-{linenos=off}
+
     interface Example {
         R apply(A arg);
     }
@@ -50,7 +50,7 @@ We could instantiate an instance with something like this;
 
 new Example, override the method, implement the body.
 
-{linenos=off}
+
     new Example() {
         @Override
         public R apply(A args) {
@@ -61,14 +61,14 @@ new Example, override the method, implement the body.
 
 And to convert to a lambda, we basically trim the fat. We drop the instantiation and annotation, drop the method details which leaves just the argument list and the body.
 
-{linenos=off}
+
     (args) {
         body
     }
 
 we then introduce the new arrow symbol to indicate both that the whole thing is a lambda and that what follows is the body.
 
-{linenos=off}
+
     (args) -> { body }
 
 
@@ -79,7 +79,7 @@ Let's take the sorting example from earlier through these steps.
 
 We start with the anonymous instance;
 
-{linenos=off}
+
     Arrays.sort(numbers, new Comparator<Integer>() {
         @Override
         public int compare(Integer first, Integer second) {
@@ -90,28 +90,28 @@ We start with the anonymous instance;
 
 and trim the instantiation and method signature
 
-{linenos=off}
+
     Arrays.sort(numbers, (Integer first, Integer second) {
         return first.compareTo(second);
     });
 
 introduce the lambda
 
-{linenos=off}
+
     Arrays.sort(numbers, (Integer first, Integer second) -> {
         return first.compareTo(second);
     });
 
 and we're done. There's a couple of optimisations we can do though. You can drop the types if the compiler knows enough to infer them.
 
-{linenos=off}
+
     Arrays.sort(numbers, (first, second) -> {
         return first.compareTo(second);
     });
 
 and for simple expressions, you can drop the braces to produce a lambda expression
 
-{linenos=off}
+
     Arrays.sort(numbers, (first, second) -> first.compareTo(second));
 
 
@@ -122,12 +122,12 @@ For single argument interface methods, you can even drop the first brackets. For
 
 A lambda taking an argument `x` and returning `x + 1`
 
-{linenos=off}
+
     (x) -> x + 1
 
 can be written without the brackets
 
-{linenos=off}
+
     x -> x + 1
 
 
@@ -138,12 +138,12 @@ Let's recap with a summary of the syntax options.
 
 {title="Syntax Summary", lang="java", line-numbers="on"}
 ~~~~~~~
-    (int x, int y) -> { return x + y; }
-    (x, y) -> { return x + y; }
-    (x, y) -> x + y;
-    x -> x * 2
-    () -> System.out.println(“Hey there!”);
-    System.out::println;
+(int x, int y) -> { return x + y; }
+(x, y) -> { return x + y; }
+(x, y) -> x + y;
+x -> x * 2
+() -> System.out.println(“Hey there!”);
+System.out::println;
 ~~~~~~~
 
 

@@ -42,5 +42,5 @@ In simple terms then, a lambda is just an anonymous function. That's it. Nothing
 
 Many main stream languages already support lambdas including Scala, C#, Objective-C, Ruby, C++(11), Python and many others.
 
-{pagebreak}
+
 

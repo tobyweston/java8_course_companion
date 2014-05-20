@@ -10,11 +10,14 @@ Oracle have introduced a new annotation `@FunctionalInterface` to mark an interf
 
 For example, this interface compiles,
 
+
     public interface FunctionalInterfaceExample {
+        // compiles ok
     }
 
 
 but when you indicate that it should be a _functional interface_ with the the new annotation,
+
 
     @FunctionalInterface // <- error here
         public interface FunctionalInterfaceExample {
@@ -24,6 +27,7 @@ but when you indicate that it should be a _functional interface_ with the the ne
 the compiler will raise an error. It tells us "Example is not a functional interface" as "no abstract method was found". Often the IDE will also hint, [IntelliJ](http://www.jetbrains.com/idea/) will say something like "no target method was found". It's hinting that we left off the functional method. A "single abstract method" needs a single, abstract method!
 
 So what if we try and add a second method to the interface?
+
 
     @FunctionalInterface
     public interface FunctionalInterfaceExample {
@@ -41,6 +45,7 @@ What about the case of an interfaces that extends another interfaces?
 
 Let's create a new functional interface called "A" and another called "B" which extends "A". "B" is still "functional". It inherits the parents `apply` method as you'd expect.
 
+
     @FunctionalInterface
     interface A {
         abstract void apply();
@@ -51,6 +56,7 @@ Let's create a new functional interface called "A" and another called "B" which 
     }
 
 If you wanted to make this clearer, you can also override the functional method from the parent.
+
 
     @FunctionalInterface
     interface A {
@@ -64,6 +70,7 @@ If you wanted to make this clearer, you can also override the functional method 
 
 
 We can verify it works as a functional interface if we use it as a lambda. So I'll implement a little method here to show that a lambda can be assigned to a type of `A` and a type of `B`. The implementation just prints out "A" or "B".
+
 
 	@FunctionalInterface
 	public interface A {
@@ -81,6 +88,7 @@ We can verify it works as a functional interface if we use it as a lambda. So I'
 	}
 
 You can't add a new abstract method to the extending interface though, as the resulting type would have two abstract methods and so the IDE will warn us and the compiler will error.
+
 
     @FunctionalInterface
     public interface A {
@@ -101,7 +109,7 @@ You can't add a new abstract method to the extending interface though, as the re
 In both cases, you can override methods from `Object` without causing problems. You can also add default methods (also new to Java 8). As you'd probably expect, it doesn't make sense to try and mark an abstract class as a functional interface.
 
 
-### ???
+### Other Interface Improvements
 
 Interfaces generally have had some new features added. We'll look at those in detail in Part 2, but just so that you're aware they include.
 
@@ -128,3 +136,6 @@ We had a quick look at interface inheritance and how that affects things and I m
 
 
 An important point to take away was the idea that any place a functional interface is used, you can now use lambdas. Lambdas can be used in-lieu of anonymous implementations of the functional interface. Using a lambda instead of the anonymous class may seem like syntactic sugar, but they're actually quiet different. See the [Functions vs. classes](#functions_vs_classes) section for more details.
+
+
+

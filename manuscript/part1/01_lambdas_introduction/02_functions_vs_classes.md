@@ -11,32 +11,28 @@ You can use lambdas in Java 8 anywhere you would have previously used a [single 
 
 A typical implementation of an anonymous class (a single method interface) in Java pre-8, might look something like this. The `anonymousClass` method is calling the `waitFor` method passing in some implementation of `Condition`, in this case it's saying wait for some server to have shutdown.
 
-{title="Typical usage of an anonymous class", lang="java", line-numbers="on"}
-~~~~~~~
-void anonymousClass() {
-    final Server server = new HttpServer();
-    waitFor(new Condition() {
-        @Override
-        public Boolean isSatisfied() {
-            return !server.isRunning();
-        }
-    });
-}
-~~~~~~~
+{title="Typical usage of an anonymous class"}
+    void anonymousClass() {
+        final Server server = new HttpServer();
+        waitFor(new Condition() {
+            @Override
+            public Boolean isSatisfied() {
+                return !server.isRunning();
+            }
+        });
+    }
 
 The functionally equivalent lambda would look like this.
 
-{title="Equivalent functionality as a lambda", lang="java", line-numbers="on"}
-~~~~~~~
+{title="Equivalent functionality as a lambda"}
     void closure() {
         Server server = new HttpServer();
         waitFor(() -> !server.isRunning());
     }
-~~~~~~~
+
 
 Where in the interest of completeness, a naive polling `waitFor` method might look like this.
 
-{linenos=off}
     class WaitFor {
         static void waitFor(Condition condition) throws InterruptedException {
             while (!condition.isSatisfied())
@@ -79,9 +75,8 @@ In lambdas on the other hand, `this` refers to the enclosing scope (`Foo` direct
 
 For example, this class shows that the lambda can reference the `firstName` variable directly.
 
-{linenos=off}
-    public class Example {
 
+    public class Example {
         private String firstName = "Jack";
 
         public void example() {
@@ -94,9 +89,8 @@ For example, this class shows that the lambda can reference the `firstName` vari
 
 The anonymous class equivalent would need to explicitly refer to `firstName` from the enclosing scope.
 
-{linenos=off}
-    public class Example {
 
+    public class Example {
         private String firstName = "Charlie";
 
         public void anotherExample() {
@@ -121,5 +115,5 @@ When we take a look at the new lambda syntax next, remember that although lambda
 
 This should serve to remind you that lambdas in Java 8 are **not** just syntactic sugar.
 
-{pagebreak}
+
 
