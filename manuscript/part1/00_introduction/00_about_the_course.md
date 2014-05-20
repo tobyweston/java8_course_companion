@@ -1,5 +1,7 @@
 -# Introduction
 
+# Introduction
+
 Welcome to my course on What's new in Java 8.
 
 The course is split into two parts which you can buy separately from [Udemy.com](https://www.udemy.com/whats-new-in-java-8).

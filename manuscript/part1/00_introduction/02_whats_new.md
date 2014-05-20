@@ -1,4 +1,4 @@
-# What's new in Java 8
+## What's new in Java 8
 
 It's been two years, seven months, and eighteen days since the last release of Java. Oracle have put this time to good use and really crammed in the features.
 
@@ -7,7 +7,7 @@ The headliners are of-course lambdas and and a retrofit to support functional pr
 Although Java is not and never will be a pure functional programming language, Java 8 does allow you to use functional idioms more easily. With disciple and experience, you can now get a lot of the benefits of functional programming without the third-party libraries.
 
 
-## Features
+### Features
 
 It's a big shift for Java and an exciting time to be a Java developer, so lets take a whistle-stop tour of what's in the Java 8 release.
 
