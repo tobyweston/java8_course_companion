@@ -438,7 +438,37 @@ If you expand it fully to an anonymous interface, it looks like this. The `x` pa
 
 ### Summary
 
-Let's have a look at the summary of the syntax for the four types of method reference.
+[Oracle describe the four kinds of method reference](http://docs.oracle.com/javase/tutorial/java/javaOO/methodreferences.html) as follows.
+
+| Kind                                                                           | Example                                |
+|--------------------------------------------------------------------------------|----------------------------------------|
+| Reference to a static method                                                   | `ContainingClass::staticMethodName`
+| Reference to an instance method of a particular object                         | `ContainingObject::instanceMethodName`
+| Reference to an instance method of an arbitrary object of a particular type    | `ContainingType::methodName`
+| Reference to a constructor                                                     | `ClassName::new`
+
+
+But the instance method descriptions are just plain confusing. What on earth is an instance method of an arbitrary object of a particular type? Aren't all objects _of a_ particular type?  Why is it important that the object is _arbitrary_?
+
+I prefer to think of the first as an instance method of a _specific_ object known ahead of time and the second as an instance method of an arbitrary object that will be _supplied_ later. Interestingly, this means the first is a _closure_ and the second is a _lambda_. One is _bound_ and the other _unbound_. The distinction between a method reference that closes over something (a closure) and one that doesn't (a lambda) may be a bit academic but at least it's a more formal definition than Oracle's unhelpful description.
+
+
+| Kind                                                                 | Syntax                           | Example                  |
+|----------------------------------------------------------------------|----------------------------------|--------------------------|
+| Reference to a static method                                         | `Class::staticMethodName`        | `String::valueOf`
+| Reference to an instance method of a specific object                 | `object::instanceMethodName`     | `x::toString`
+| Reference to an instance method of a arbitrary object supplied later | `Class::instanceMethodName`      | `String::toString`
+| Reference to a constructor                                           | `ClassName::new`                 | `String::new`
+
+or as equivalent lambdas
+
+| Kind                                                                 | Syntax                           | As Lambda                  |
+|----------------------------------------------------------------------|----------------------------------|----------------------------|
+| Reference to a static method                                         | `Class::staticMethodName`        | `(s) -> String.valueOf(s)`
+| Reference to an instance method of a specific object                 | `object::instanceMethodName`     | `() -> "hello".toString()`
+| Reference to an instance method of a arbitrary object supplied later | `Class::instanceMethodName`      | `(s) -> s.toString()`
+| Reference to a constructor                                           | `ClassName::new`                 | `() -> new String()`
+
 
 Note that the syntax for a static method reference looks very similar to a reference to an instance method of a class. The compiler determines which to use by going through each applicable static method and each applicable instance method. If it were to find a match for both, the result would be a compiler error.
 
