@@ -1,36 +1,57 @@
-## Scope & Effectively Final
-
-### Scoping
+## Scoping
 
 The good news with lambdas is that they don't introduce any new scoping. Using variables within a lambda will refer to variables residing in the enclosing environment.
 
 This is what's called lexical scoping. It means that lambdas don't introduce a new level of scoping at all; you can directly access fields, methods and variables from the enclosing scope. It's also the case for the `this` and `super` keywords. So we don't have to worry about the crazy nested class syntax for resolving scope.
 
-Let's take a look at an example.
+Let's take a look at an example. We have an example class here, with a member variable `i` set to the value of `5`.
 
-[demo - lexical_scoping.demo ]
+    public static class Example {
+        int i = 5;
 
-We have an example class here, with a member variable `i` set to the value of `5`. In the first method, a lambda uses a variable called `i` and multiplies it by two.
+        public Integer example() {
+            Supplier<Integer> function = () -> i * 2;
+            return function.get();
+        }
+    }
+
+In the `example` method, a lambda uses a variable called `i` and multiplies it by two.
 
 Because lambdas are lexically scoped, `i` simply refers to the enclosing classes' variable. It's value at run-time will be `5`. Using `this` drives home the point; `this` within a lambda is the same as without.
 
-In the next method, a method parameter is used which is also called `i`. The usual shadowing rules kick in here and `i` will refer to the method parameter and not the class member variable. The method variable _shadows_ the class variable. It's value will be whatever is passed into the method.
+    public static class Example {
+        int i = 5;
 
-If you wanted to refer to the class variable, you could make the variable explicit with `this`.
+        public Integer example() {
+            Supplier<Integer> function = () -> this.i * 2;
+            return function.get();
+        }
+    }
 
-Now this final example has a locally scoped variable defined within the method. Remember that lambdas use their enclosing scope as their own, so in this case, `i` within the lambda refers to the method's variable. `i` will be `15`.
+In the `anotherExample` method below, a method parameter is used which is also called `i`. The usual shadowing rules kick in here and `i` will refer to the method parameter and not the class member variable. The method variable _shadows_ the class variable. It's value will be whatever is passed into the method.
 
-Let's create a method to print out this values so you can see for yourself.
+    public static class Example {
+        int i = 5;
 
-Let's run it.
+        public Integer anotherExample(int i) {
+            Supplier<Integer> function = () -> i * 2;
+            return function.get();
+        }
+    }
 
-So, the first method prints `10`; `5` from the class variable multiplied by two.
+If you wanted to refer to the class variable `i` and not the parameter `i` from within the body, you could make the variable explicit with `this`. For example, `Supplier<Integer> function = () -> i * 2;`.
 
-the second method prints `20` as the parameter value was `10` and was multiplied by two.
+The following example has a locally scoped variable defined within the `yetAnotherExample` method. Remember that lambdas use their enclosing scope as their own, so in this case, `i` within the lambda refers to the method's variable. `i` will be `15` and not `5`.
 
-and the final method prints `30` as the local method variable was set to `15` and again multiplied by two.
+If you want to see this for yourself, you could use a method like the following to print out the values.
 
-[end-demo]
+    public static void main(String... args) {
+		System.out.println("class variable scope   = " + new Example().example());
+		System.out.println("method parameter scope = " + new Example().anotherExample(10));
+		System.out.println("method scope           = " + new Example().yetAnotherExample());
+	}
+
+So, the first method prints `10`; `5` from the class variable multiplied by two. The second method prints `20` as the parameter value was `10` and was multiplied by two and the final method prints `30` as the local method variable was set to `15` and again multiplied by two.
 
 
 Lexical scoping means deferring to the enclosing environment. Each example had a different enclosing environment or scope. You saw a variable defined as a class member, a method parameter and locally from within a method. In all cases, the lambda behaved consistently and referenced the variable from these enclosing scopes.
@@ -40,23 +61,15 @@ Lambda scoping should be intuitive if you're already familiar with basic Java sc
 
 
 
-### Effectively Final
+## Effectively Final
 
 In Java 7, any variable passed into an anonymous class instance would need to be made final.
 
 This is because the compiler actually copies all the context or _environment_ it needs into the instance of the anonymous class. If those values were to change under it, unexpected side affects could happen. So Java insists that the variable be final to ensure it doesn't change and the inner class can operate on them safely. By safely, I mean without race conditions or visibility problems between threads.
 
-Let's have a look at an example.
+Let's have a look at an example. To start with we'll use Java 7 and create a method called `filter` that takes a list of people and a predicate. We'll create a temporary list to contain any matches we find then enumerate each element testing to see if the predicate holds true for each person. If the test is positive, we'll add them to the temporary list before returning all matches.
 
-To start with I'll working with Java 7.
-
-
-[demo - effectively_final.demo - NB set lanauge level to 7 first]
-
-Let's start with a method to filter people based on some predicate.
-
-We'll create a method called `filter` that takes a list of people and a predicate. We'll create a temporary list to contain any matches we find then enumerate each element testing to see if the predicate holds true for each person. If the test is positive, we'll add them to the temporary list before returning all matches.
-
+    // java 7
 	private static List<Person> filter(List<Person> people, Predicate<Person> predicate) {
 		ArrayList<Person> matches = new ArrayList<>();
 		for (Person person : people)
@@ -80,45 +93,41 @@ We'll implement this to return true if a person's age is greater than or equal t
 		});
 	}
 
-Notice how we get a compiler failure when accessing the variable. This is because the variable isn't final. Let's go back and make it final.
+If you try and compile this, you'll get a compiler failure when accessing the variable. This is because the variable isn't final. We'd need to add `final` to make it compile.
 
-[side-bar slide]
+    final int retirementAge = 55;
 
-As a side bar, passing the environment into an anonymous inner class like this is an example of a closure. The environment is what a closure "closes" over; it has to capture the variables it needs to do its job. The Java compiler achieves this using the copy trick rather than try and manage multiple changes to the same variable. In the context of closures, this is called _variable capture_.
 
-[end side-bar]
-
+A>
+A> Passing the environment into an anonymous inner class like this is an example of a closure. The environment is what a closure "closes" over; it has to capture the variables it needs to do its job. The Java compiler achieves this using the copy trick rather than try and manage multiple changes to the same variable. In the context of closures, this is called _variable capture_.
+A>
 
 Java 8 introduces the idea of "effectively final" which means that if the compiler can work out that a particular variable is _never_ changed, it can be used where ever a final variable would have be used. It interprets it as "effectively" final.
 
-In our example, if we switch to Java 8 and drop the `final` keyword. Things still compile. No need to make the variable final. Java knows that the variable doesn't change so it makes it effectively final. It's very neat.
+In our example, if we switch to Java 8 and drop the `final` keyword. Things still compile. No need to make the variable final. Java knows that the variable doesn't change so it makes it effectively final.
 
     int retirementAge = 55;
 
-Of course, you could make it final if you wanted.
+Of course, it still compiles if you were to make it final.
 
 
 But how about if we try and modify the variable after we've initialised it?
 
+    int retirementAge = 55;
+    // ...
     retirementAge = 65;
 
-The compiler spots the change and can no long treat the variable as effectively final and so we get the original compilation error asking us to make it final.
-
-Conversely, if adding the `final` keyword to a variable declaration doesn't cause a compiler error, then the variable is effectively final.
+The compiler spots the change and can no longer treat the variable as effectively final. We get the original compilation error asking us to make it final. Conversely, if adding the `final` keyword to a variable declaration doesn't cause a compiler error, then the variable is effectively final.
 
 
-I've been demonstrating the point here with an anonymous class because the idea of effectively final isn't something specific to lambdas. It is of course applicable to lambdas. If I convert this anonymous class into a lambda, nothing changes. There's still no need to make the variable final.
-
-[end-demo]
+I've been demonstrating the point here with an anonymous class examples because the idea of effectively final isn't something specific to lambdas. It is of course applicable to lambdas though. You can convert this anonymous class above into a lambda and nothing changes. There's still no need to make the variable final.
 
 
-One other thing.
+### Circumventing Final
 
 You can still get round the safety net by passing in final objects or arrays and then change their internals in your lambda.
 
-As an example, I'm going to write some very imperative code. Please don't take this as an example of writing idiomatic functional code.
-
-Taking our list of people, lets say I want to sum all their ages. I could create a method to loop and sum like this;
+For example, taking our list of people, lets say we want to sum all their ages. I could create a method to loop and sum like this;
 
     private static int sumAllAges(List<Person> people) {
         int sum = 0;
@@ -128,7 +137,7 @@ Taking our list of people, lets say I want to sum all their ages. I could create
         return sum;
     }
 
-where I maintain a sum count as I enumerate the list.
+where I maintain a sum count as the list is enumerated.
 
 or I could try and abstract the looping behaviour and pass in a function to be applied to each element. Like this.
 
@@ -154,7 +163,7 @@ and to achieve the summing behaviour, all I'd need to do is create a function th
         };
     }
 
-Where the functions method takes an integer and returns an integer. In the implementation the variable `sum` is a class member variable and is mutated each time the function is applied. This kind of mutation is generally bad form when it comes to functional programming.
+Where the functions method takes an integer and returns an integer. In the implementation, the `sum` variable is a class member variable and is mutated each time the function is applied. This kind of mutation is generally bad form when it comes to functional programming.
 
 Nether the less, we can pass this into our `forEach` method like this;
 
@@ -187,8 +196,6 @@ The trick around this is to use a object or an array; it's reference can remain 
     forEach(allPeople, x -> sum[0] += x);
 
 
-The array reference is indeed final here, but we can modify the array contents without reassigning the reference. However, this is generally bad form as it opens up to all the safety issues we talked about earlier.
-
-As I mentioned, this is all a little bad form. I wanted to mention it for illustration purposes but I don't recommend you do this kind of thing often. It's generally better not to create functions with side affects and you can avoid the issues completly if you use a more functional approach.
+The array reference is indeed final here, but we can modify the array contents without reassigning the reference. However, this is generally bad form as it opens up to all the safety issues we talked about earlier. I wanted to mention it for illustration purposes but I don't recommend you do this kind of thing often. It's generally better not to create functions with side affects and you can avoid the issues completely if you use a more functional approach.
 
 The idiomatic way to do this kind of summing is to use what's called a "fold" or in the Java vernacular "reduce". We'll be looking at this in more detail when we look at streams and the 'java.util.function Package'.
