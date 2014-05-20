@@ -147,7 +147,7 @@ but if we want to be able to reuse that initialising function, we could extract 
 		}
 	}
 
-`Factory` here is a functional interface with a method called `create` that returns some object. We can then add the object it created to the list. Because it's a functional interface, we can use a lambda to implement the factory to initialise the list;
+The `Factory` class is just a functional interface with a method called `create` that returns some object. We can then add the object it created to the list. Because it's a functional interface, we can use a lambda to implement the factory to initialise the list;
 
     public void usage() {
  		List<Object> list = new ArrayList<>();
@@ -158,12 +158,7 @@ Or we could swap in a constructor reference.
 
     public void usage() {
  		List<Object> list = new ArrayList<>();
- 		// leanpub-start-delete
-        initialise(list, () -> new Object());
-        // leanpub-end-delete
-        // leanpub-start-insert
  		initialise(list, Object::new);
- 		// leanpub-end-insert
  	}
 
 
@@ -213,9 +208,7 @@ but this doesn't translate to a constructor reference directly. If we were to tr
 it won't compile as it doesn't know anything about the parameters. If you try and compile it, the error says you've created an invalid constructor reference that cannot be applied to the given types; it found no arguments.
 
 
-Instead, we have to introduce some indirection to give the compiler enough information to find an appropriate constructor.
-
-We can create something that can be used as a functional interface _and_ has the right types to slot into the appropriate constructor;
+Instead, we have to introduce some indirection to give the compiler enough information to find an appropriate constructor. We can create something that can be used as a functional interface _and_ has the right types to slot into the appropriate constructor;
 
 Let's create a new functional interface called `PersonFactory`.
 
@@ -286,15 +279,11 @@ or inline, like this
 
 ### Static method reference
 
-A method reference can point directly to a static method.
-
-For example,
+A method reference can point directly to a static method. For example,
 
     String::valueOf
 
-This time, the left hand side refers to the type where a static method, in this case `valueOf` can be found.
-
-It's equivalent to this lambda
+This time, the left hand side refers to the type where a static method, in this case `valueOf` can be found. It's equivalent to this lambda
 
     x -> String.valueOf(x))
 
