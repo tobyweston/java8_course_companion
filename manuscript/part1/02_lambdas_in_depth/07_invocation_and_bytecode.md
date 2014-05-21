@@ -123,34 +123,6 @@ and we're done. A JVM method descriptor.
 
 
 
-
-
-
-
-### Static vs Dynamic Typing
-
-Most of the JVM invocation opcodes are statically typed; they check the method signature types at compile time.
-
-Most of the existing JVM instruction set is statically typed - in the sense that method calls have their signatures type-checked at compile time, without a mechanism to defer this decision to run time, or to choose the method dispatch by an alternative approach.[5]
-
-JSR 292 (Supporting Dynamically Typed Languages on the Java™ Platform)[6] added a new invokedynamic instruction at the JVM level, to allow method invocation relying on dynamic type checking (instead of the existing statically type-checked invokevirtual instruction).
-
-
-
-## invokedynamic bytecode instruction (optimisation, construct the lambda at runtime)
-
- * `invokestatic` is used to call static methods of a class
- * `invokespecial` is used to call constructors, private methods and accessible methods of a super class
- * `invokevirtual` is used to cal public, protected an package protected method
- * `invokeinterface` is used when the method being called belongs to an interface
- * `invokedynamic` is used ...
-
-
-
-
-
-
-
 ## Code Examples
 
 Lets have a look at the bytecode produced for some examples.
