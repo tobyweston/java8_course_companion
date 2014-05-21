@@ -1,12 +1,6 @@
 ## Invocation & Bytecode
 
-In this section we'll explore how the compiler output differs when you compile anonymous classes to when you compile lambdas.
-
-First we'll remind ourselves about java bytecode and how to read it.
-
-Then we'll look at both anonymous classes and lambdas when they capture variables and when they don't.
-
-We'll compare pre-Java 8 closures with lambdas and explore how lambdas are _not_ just syntactic sugar but produce very different bytecode from the traditional approaches.
+In this section we'll explore how the compiler output differs when you compile anonymous classes to when you compile lambdas. First we'll remind ourselves about java bytecode and how to read it. Then we'll look at both anonymous classes and lambdas when they capture variables and when they don't. We'll compare pre-Java 8 closures with lambdas and explore how lambdas are _not_ just syntactic sugar but produce very different bytecode from the traditional approaches.
 
 
 ### Bytecode Recap
@@ -23,41 +17,44 @@ Both happen at run-time but Just-in-time compilation offer lots of optimisations
 
 So, Java bytecode is the intermediate representation between source code and machine code.
 
-As a quick side bar: Java's JIT compiler has enjoyed a great reputation over the years. But going back full circle to our introduction, it was John McCarthy that first wrote about JIT compilation way back in 1960. So it's interesting to think that it's not just lambda support that was influenced by LISP. ([Aycock 2003, 2. JIT Compilation Techniques, 2.1 Genesis, p. 98](http://user.it.uu.se/~kostis/Teaching/KT2-04/jit_survey.pdf)).
+A>
+A> As a quick side bar: Java's JIT compiler has enjoyed a great reputation over the years. But going back full circle to our introduction, it was John McCarthy that first wrote about JIT compilation way back in 1960. So it's interesting to think that it's not just lambda support that was influenced by LISP. ([Aycock 2003, 2. JIT Compilation Techniques, 2.1 Genesis, p. 98](http://user.it.uu.se/~kostis/Teaching/KT2-04/jit_survey.pdf)).
+A>
 
-
-Getting back to bytecode...
-
-bytecode is the instruction set of the JVM. As it's name suggests, bytecode consists of single-byte instructions (called opcodes) along with associated bytes for parameters. There are therefore a possible 256 opcodes available although only about 200 are actually used.
+The bytecode is the instruction set of the JVM. As it's name suggests, bytecode consists of single-byte instructions (called opcodes) along with associated bytes for parameters. There are therefore a possible 256 opcodes available although only about 200 are actually used.
 
 The JVM uses a [stack based computation model](http://en.wikipedia.org/wiki/Model_of_computation), if we want to increment a number, we have to do it using the stack. All instructions or opcodes work against the stack.
 
 So for example, `5 + 1` becomes `5 1 +`
 
-[slide]
+IMAGE
 
  where `5` is pushed to the stack,
 
-[slide]
+IMAGE
 
 `1` is pushed then...
 
- [slide]
+IMAGE
 
 the `+` operator is applied. Plus would pop the top two frames, add the numbers together and push the result back onto the stack.
 
 The result would look like this.
 
-
+IMAGE
 
 Each opcode works against the stack like this so we can translate our example into a sequence of bytecodes
 
-push 5 becomes `iconst_5` [slide] push 1 becomes `iconst_1` [slide] and `add` becomes `iadd`
-
-`iconst_x` and `iadd` are examples of opcodes. Opcodes often have prefixes and/or suffices to indicate the types they work on, `i` in these examples refers to `integer`.
-
+push 5 becomes `iconst_5` push 1 becomes `iconst_1` and `add` becomes `iadd`. `iconst_x` and `iadd` are examples of opcodes. Opcodes often have prefixes and/or suffices to indicate the types they work on, `i` in these examples refers to `integer`.
 
 We can group the opcodes into the following categories.
+
+| Group                                       | Examples                              |
+|---------------------------------------------|---------------------------------------|
+| Stack manipulation                          | `aload_n`, `istore`, `swap`, `dup2`
+| Control flow instructions                   | `goto`, `ifeq`, `iflt`
+| Object interactions                         | `new`, `invokespecial`, `areturn`
+| Arithmetic, logic and type conversion       | `iadd`, `fcmpl`, `i2b`
 
 Instructions concerned with stack manipulation, like we've seen before. Examples being `aload`, `istore` etc.
 
@@ -68,12 +65,6 @@ Creating objects and accessing methods use codes like `new` and `invokespecial`.
 The last group is about arithmetic, logic and type conversion and includes codes like `iadd`, float compare long (fcmpl) and integer to byte (`i2b`).
 
 
-| Group                                       | Examples                              |
-|---------------------------------------------|---------------------------------------|
-| Stack manipulation                          | `aload_n`, `istore`, `swap`, `dup2`
-| Control flow instructions                   | `goto`, `ifeq`, `iflt`
-| Object interactions                         | `new`, `invokespecial`, `areturn`
-| Arithmetic, logic and type conversion       | `iadd`, `fcmpl`, `i2b`
 
 
 ### Descriptors
@@ -91,25 +82,42 @@ So we've got a constructor of an anonymous class that takes two parameters, an i
 Being a constructor, the method doesn't return anything. The `V` symbol represents void.
 
 
-Have a look at breakdown of the descriptor syntax and we'll work through an example.
+Have a look at breakdown of the descriptor syntax below. If you see an uppercase `Z` in a descriptor, it's referring to a `boolean`, an uppercase `B` a `byte` and so on.
 
-If you see an uppercase `Z` in a descriptor, it's referring to a `boolean`, an uppercase `B` a `byte` and so on.
+![](images/descriptors.png)
 
 A couple of ones to mention;
 
- * classes are described with an uppercase `L` followed by the fully qualified class name, followed by a semi-colon. The class name is seperated with slashes rather than the dots.
+ * classes are described with an uppercase `L` followed by the fully qualified class name, followed by a semi-colon. The class name is separated with slashes rather than the dots.
  * and arrays are described using an opening square bracket followed by a type from the list. No closing bracket.
 
 
-Let's take this method and turn it into a method descriptor.
+Let's take the following method and turn it into a method descriptor.
+
+{lang="java"}
+    long f (int n, String s, int[] array);
+
 
 The method returns a long, so we describe the fact that it is a method with brackets and that it returns a long with a uppercase `J`.
 
+{lang="text"}
+    ()J
+
 The first argument is of type int, so we use an uppercase `I`.
+
+{lang="text"}
+    (I)J
 
 The next argument is an object, so we use `L` to describe it's an object, fully qualify the name and close it with a semi-colon.
 
+{lang="text"}
+    (ILjava/lang/String;)J
+
 The last argument is an integer array so we drop in the array syntax followed by int type.
+
+{lang="text"}
+    (ILjava/lang/String;[I)J
+
 
 and we're done. A JVM method descriptor.
 
