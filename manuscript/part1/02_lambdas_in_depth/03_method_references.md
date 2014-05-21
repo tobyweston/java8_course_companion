@@ -150,16 +150,16 @@ but if we want to be able to reuse that initialising function, we could extract 
 The `Factory` class is just a functional interface with a method called `create` that returns some object. We can then add the object it created to the list. Because it's a functional interface, we can use a lambda to implement the factory to initialise the list;
 
     public void usage() {
- 		List<Object> list = new ArrayList<>();
- 		initialise(list, () -> new Object());
+        List<Object> list = new ArrayList<>();
+        initialise(list, () -> new Object());
     }
 
 Or we could swap in a constructor reference.
 
     public void usage() {
- 		List<Object> list = new ArrayList<>();
- 		initialise(list, Object::new);
- 	}
+        List<Object> list = new ArrayList<>();
+        initialise(list, Object::new);
+    }
 
 
 There's a couple of other things we could do here. If we add some generics to the `initialise` method we can reuse it when initialising lists of any type. For example, we can go back and change the type of the list to be `String` and use a constructor reference to initialise it.
@@ -196,7 +196,7 @@ Going back to our example from earlier and looking at the general purpose `initi
                                         gender, email, age));
 
 
-but to be able to use a constructor reference, we'd need a lambda _with variable arguments_ and that looks like this
+but to be able to use a constructor reference, we'd need a lambda _with variable arguments_ and that would look like this
 
     (a, b, c, d, e, f) -> new Person(a, b, c, d, e, f);
 

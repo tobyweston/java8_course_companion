@@ -41,18 +41,34 @@ In the `anotherExample` method below, a method parameter is used which is also c
 
 If you wanted to refer to the class variable `i` and not the parameter `i` from within the body, you could make the variable explicit with `this`. For example, `Supplier<Integer> function = () -> i * 2;`.
 
-The following example has a locally scoped variable defined within the `yetAnotherExample` method. Remember that lambdas use their enclosing scope as their own, so in this case, `i` within the lambda refers to the method's variable. `i` will be `15` and not `5`.
+The following example has a locally scoped variable defined within the `yetAnotherExample` method. Remember that lambdas use their enclosing scope as their own, so in this case, `i` within the lambda refers to the method's variable; `i` will be `15` and not `5`.
+
+    public static class Example {
+        int i = 5;
+
+        public Integer yetAnotherExample() {
+            int i = 15;
+            Supplier<Integer> function = () -> i * 2;
+            return function.get();
+        }
+    }
+
 
 If you want to see this for yourself, you could use a method like the following to print out the values.
 
     public static void main(String... args) {
-		System.out.println("class variable scope   = " + new Example().example());
-		System.out.println("method parameter scope = " + new Example().anotherExample(10));
-		System.out.println("method scope           = " + new Example().yetAnotherExample());
+		System.out.println("class scope        = " + new Example().example());
+		System.out.println("method param scope = " + new Example().anotherExample(10));
+		System.out.println("method scope       = " + new Example().yetAnotherExample());
 	}
 
-So, the first method prints `10`; `5` from the class variable multiplied by two. The second method prints `20` as the parameter value was `10` and was multiplied by two and the final method prints `30` as the local method variable was set to `15` and again multiplied by two.
+The output would look like this.
 
+    class scope        = 10
+    method param scope = 20
+    method scope       = 30
+
+So, the first method prints `10`; `5` from the class variable multiplied by two. The second method prints `20` as the parameter value was `10` and was multiplied by two and the final method prints `30` as the local method variable was set to `15` and again multiplied by two.
 
 Lexical scoping means deferring to the enclosing environment. Each example had a different enclosing environment or scope. You saw a variable defined as a class member, a method parameter and locally from within a method. In all cases, the lambda behaved consistently and referenced the variable from these enclosing scopes.
 
@@ -70,7 +86,7 @@ This is because the compiler actually copies all the context or _environment_ it
 Let's have a look at an example. To start with we'll use Java 7 and create a method called `filter` that takes a list of people and a predicate. We'll create a temporary list to contain any matches we find then enumerate each element testing to see if the predicate holds true for each person. If the test is positive, we'll add them to the temporary list before returning all matches.
 
     // java 7
-	private static List<Person> filter(List<Person> people, Predicate<Person> predicate) {
+	private List<Person> filter(List<Person> people, Predicate<Person> predicate) {
 		ArrayList<Person> matches = new ArrayList<>();
 		for (Person person : people)
 			if (predicate.test(person))
@@ -127,7 +143,7 @@ I've been demonstrating the point here with an anonymous class examples because 
 
 You can still get round the safety net by passing in final objects or arrays and then change their internals in your lambda.
 
-For example, taking our list of people, lets say we want to sum all their ages. I could create a method to loop and sum like this;
+For example, taking our list of people, lets say we want to sum all their ages. We could create a method to loop and sum like this;
 
     private static int sumAllAges(List<Person> people) {
         int sum = 0;
@@ -137,9 +153,7 @@ For example, taking our list of people, lets say we want to sum all their ages. 
         return sum;
     }
 
-where I maintain a sum count as the list is enumerated.
-
-or I could try and abstract the looping behaviour and pass in a function to be applied to each element. Like this.
+where the sum count is maintained as the list is enumerated. As an alternative, we could try and abstract the looping behaviour and pass in a function to be applied to each element. Like this.
 
    public final static Integer forEach(List<Person> people, Function<Integer, Integer> function) {
         Integer result = null;
@@ -149,7 +163,7 @@ or I could try and abstract the looping behaviour and pass in a function to be a
         return result;
     }
 
-and to achieve the summing behaviour, all I'd need to do is create a function that can sum. I could do this using an anonymous class like this;
+and to achieve the summing behaviour, all we'd need to do is create a function that can sum. You could do this using an anonymous class like this;
 
     private static void badExample() {
         Function<Integer, Integer> sum = new Function<Integer, Integer>() {
