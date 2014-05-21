@@ -215,7 +215,8 @@ Let's create a new functional interface called `PersonFactory`.
 
     @FunctionalInterface
     interface PersonFactory {
-        Person create(String forename, String surname, LocalDate birthday, Sex gender, String emailAddress, int age);
+        Person create(String forename, String surname, LocalDate birthday,
+                            Sex gender, String emailAddress, int age);
     }
 
 
@@ -251,7 +252,9 @@ It understands the target type to use is `PersonFactory` and it understands that
 
 To finish off the example, we need to tweak our initialise method to add the type information (replace the generics), add parameters to represent the person's details and actually invoke the factory.
 
-    private void initialise(List<Person> list, PersonFactory factory, String forename, String surname, LocalDate birthday, Sex gender, String emailAddress, int age) {
+    private void initialise(List<Person> list, PersonFactory factory, String forename,
+                                String surname, LocalDate birthday, Sex gender,
+                                String emailAddress, int age) {
         for (int i = 0; i < 10; i++) {
             list.add(factory.create(forename, surname, birthday,
                                         gender, emailAddress, age));

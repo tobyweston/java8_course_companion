@@ -77,7 +77,7 @@ Lambda scoping should be intuitive if you're already familiar with basic Java sc
 
 
 
-## Effectively Final
+## Effectively Final {#effectively_final}
 
 In Java 7, any variable passed into an anonymous class instance would need to be made final.
 
