@@ -330,33 +330,53 @@ So we need to wrap the call in a try/catch to make the compiler happy.
 The end result is something like we saw previously but without the need for the `unchecked` method. As a library developer, we've made it easier for clients to integrate with our code.
 
 
-************ got to here, not sure this is right ************
-
-But what about if we try something more exotic? Let's make the `runInSequence` method asynchronous again. There's no need to throw the exception anymore so this version of the `runInSequence` method doesn't include the `throws` clause.
+But what about if we try something more exotic? Let's make the `runInSequence` method asynchronous again. There's no need to throw the exception from the method signature as it wouldn't propogate to the caller if it were thrown from a different thread. So this version of the `runInSequence` method doesn't include the `throws` clause and the `transfer` method is no longer forced to deal with it. However, the calls to `.transfer` will still throw an exception.
 
     public static void runInSequence(Runnable first, Runnable second) {
         new Thread(() -> {
-            first.transfer();
-            second.transfer();
+            first.transfer();   <- compiler error
+            second.transfer();  <- compiler error
         }).start();
+    }
+
+    public void transfer(BankAccount a, BankAccount b, Integer amount) {
+        FinancialTransfer debit = () -> a.debit(amount);
+        FinancialTransfer credit = () -> b.credit(amount);
+        runInSequence(debit, credit);  <- compiler error
     }
 
 
 
-With that gone and compiler errors still in the `runInSequence` method, we need another way to handle the exception. One technique is to pass in a function that will be called in the event of an exception. We can use this lambda to bridge the code running asynchronously back to the caller.
+With the compiler errors still in the `runInSequence` method, we need another way to handle the exception. One technique is to pass in a function that will be called in the event of an exception. We can use this lambda to bridge the code running asynchronously back to the caller.
 
-To start with, we'll add the catch block back in and pass in a functional interface to use as the exception handler.
+To start with, we'll add the catch block back in and pass in a functional interface to use as the exception handler. I'll use the `Consumer` interface here, it's new in Java 8 and part of the `java.util.function` package. We then call the interface method in the catch block, passing in the cause.
 
-I'll use the `Consumer` interface here, it's new in Java 8 and part of the `java.util.function` package. We then call the interface method in the catch block, passing in the cause. To make that useful, we need to supply a lambda in the `transfer` method.
 
-The parameter of the lambda, i've called it `exception` here, will be whatever is passed into the `accept` method in `runInSequence`. It will be an instance of `InsufficientFundsException` and the client can deal with it however they chose.
+	public void runInSequence(FinancialTransfer first, FinancialTransfer second,
+	        Consumer<InsufficientFundsException> exceptionHandler) {
+		new Thread(() -> {
+			try {
+				first.transfer();
+				second.transfer();
+			} catch (InsufficientFundsException e) {
+				exceptionHandler.accept(e);
+			}
+		}).start();
+	}
 
-Lets pop that in place to finish the example.
+To call it, we need to update the `transfer` method to pass in a lambda for the callback. The lambda, I'll call it `insufficientFundsHandler` below, will be whatever is passed into the `accept` method in `runInSequence`. It will be an instance of `InsufficientFundsException` and the client can deal with it however they chose.
+
+	public void transfer(BankAccount a, BankAccount b, Integer amount) {
+		FinancialTransfer debit = () -> a.debit(amount);
+		FinancialTransfer credit = () -> b.credit(amount);
+		Consumer<InsufficientFundsException> insufficientFundsHandler = (exception) -> {
+		    /* check account balances and rollback */
+        };
+		runInSequenceNonBlocking(debit, credit, insufficientFundsHandler);
+	}
 
 There we are. We've provided the client to our library with an alternative exception handling mechanism rather than forcing them to catch exceptions.
 
-We've _internalised_ the exception handling into the library code. It's a good example of deferred execution; should there be an exception, the client doesn't necessarily know when his exception handler would get invoked. For example, as we're running in another thread, the bank accounts themselves may have be altered by the time it executes. Again it highlights that using exceptions to control your program's flow is a flawed approach.
-
-You can't rely on the exception handler being called when it's convenient for you; we've just opened a whole can of concurrency worms.
+We've _internalised_ the exception handling into the library code. It's a good example of deferred execution; should there be an exception, the client doesn't necessarily know when his exception handler would get invoked. For example, as we're running in another thread, the bank accounts themselves may have be altered by the time it executes. Again it highlights that using exceptions to control your program's flow is a flawed approach. You can't rely on the exception handler being called when it's convenient for you.
 
 
