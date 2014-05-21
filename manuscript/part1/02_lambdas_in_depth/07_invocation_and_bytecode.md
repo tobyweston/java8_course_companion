@@ -123,7 +123,7 @@ and we're done. A JVM method descriptor.
 
 
 
-## Code Examples
+### Code Examples
 
 Lets have a look at the bytecode produced for some examples.
 
@@ -207,7 +207,7 @@ It goes through the basics in the same way as the other lambdas but if we lookup
 
 So like the anonymous class in example 2, an argument is added by the compiler to capture the term although this time, it's a method argument rather than a constructor argument.
 
-## Summary
+### Summary
 
 So, we saw how using an anonymous class will create a new instance and call it's constructor with `invokespecial`.
 
