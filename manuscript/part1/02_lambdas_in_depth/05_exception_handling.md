@@ -364,15 +364,15 @@ To start with, we'll add the catch block back in and pass in a functional interf
         }).start();
     }
 
-To call it, we need to update the `transfer` method to pass in a lambda for the callback. The lambda, I'll call it `insufficientFundsHandler` below, will be whatever is passed into the `accept` method in `runInSequence`. It will be an instance of `InsufficientFundsException` and the client can deal with it however they chose.
+To call it, we need to update the `transfer` method to pass in a lambda for the callback. The parameter, `exception` below, will be whatever is passed into the `accept` method in `runInSequence`. It will be an instance of `InsufficientFundsException` and the client can deal with it however they chose.
 
     public void transfer(BankAccount a, BankAccount b, Integer amount) {
         FinancialTransfer debit = () -> a.debit(amount);
         FinancialTransfer credit = () -> b.credit(amount);
-        Consumer<InsufficientFundsException> insufficientFundsHandler = (exception) -> {
+        Consumer<InsufficientFundsException> handler = (exception) -> {
             /* check account balances and rollback */
         };
-        runInSequenceNonBlocking(debit, credit, insufficientFundsHandler);
+        runInSequenceNonBlocking(debit, credit, handler);
     }
 
 There we are. We've provided the client to our library with an alternative exception handling mechanism rather than forcing them to catch exceptions.

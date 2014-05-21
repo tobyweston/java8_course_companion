@@ -57,9 +57,10 @@ The following example has a locally scoped variable defined within the `yetAnoth
 If you want to see this for yourself, you could use a method like the following to print out the values.
 
     public static void main(String... args) {
-        System.out.println("class scope        = " + new Example().example());
-        System.out.println("method param scope = " + new Example().anotherExample(10));
-        System.out.println("method scope       = " + new Example().yetAnotherExample());
+        Example scoping = new Example();
+        System.out.println("class scope        = " + scoping.example());
+        System.out.println("method param scope = " + scoping.anotherExample(10));
+        System.out.println("method scope       = " + scoping.yetAnotherExample());
     }
 
 The output would look like this.
