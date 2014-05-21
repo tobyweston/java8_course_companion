@@ -52,7 +52,6 @@ Let's create a new functional interface called "A" and another called "B" which 
     }
 
     interface B extends A {
-
     }
 
 If you wanted to make this clearer, you can also override the functional method from the parent.

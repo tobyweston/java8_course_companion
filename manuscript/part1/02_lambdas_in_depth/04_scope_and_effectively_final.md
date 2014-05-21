@@ -57,13 +57,14 @@ The following example has a locally scoped variable defined within the `yetAnoth
 If you want to see this for yourself, you could use a method like the following to print out the values.
 
     public static void main(String... args) {
-		System.out.println("class scope        = " + new Example().example());
-		System.out.println("method param scope = " + new Example().anotherExample(10));
-		System.out.println("method scope       = " + new Example().yetAnotherExample());
-	}
+        System.out.println("class scope        = " + new Example().example());
+        System.out.println("method param scope = " + new Example().anotherExample(10));
+        System.out.println("method scope       = " + new Example().yetAnotherExample());
+    }
 
 The output would look like this.
 
+{lang="text"}
     class scope        = 10
     method param scope = 20
     method scope       = 30
@@ -86,13 +87,13 @@ This is because the compiler actually copies all the context or _environment_ it
 Let's have a look at an example. To start with we'll use Java 7 and create a method called `filter` that takes a list of people and a predicate. We'll create a temporary list to contain any matches we find then enumerate each element testing to see if the predicate holds true for each person. If the test is positive, we'll add them to the temporary list before returning all matches.
 
     // java 7
-	private List<Person> filter(List<Person> people, Predicate<Person> predicate) {
-		ArrayList<Person> matches = new ArrayList<>();
-		for (Person person : people)
-			if (predicate.test(person))
-				matches.add(person);
-		return matches;
-	}
+    private List<Person> filter(List<Person> people, Predicate<Person> predicate) {
+        ArrayList<Person> matches = new ArrayList<>();
+        for (Person person : people)
+            if (predicate.test(person))
+                matches.add(person);
+        return matches;
+    }
 
 
 Then we'll create a method that uses this to find all the people in a list that are eligible for retirement. We set a retirement age variable and then call the filter method with an arbitrary list of people and a new anonymous instance of a `Predicate` interface.
@@ -100,14 +101,14 @@ Then we'll create a method that uses this to find all the people in a list that 
 We'll implement this to return true if a person's age is greater than or equal to the retirement age variable.
 
     public void findRetirees() {
-		int retirementAge = 55;
-		List<Person> retirees = filter(allPeople, new Predicate<Person>() {
-			@Override
-			public boolean test(Person person) {
-				return person.getAge() >= retirementAge; // <-- compilation error
-			}
-		});
-	}
+        int retirementAge = 55;
+        List<Person> retirees = filter(allPeople, new Predicate<Person>() {
+            @Override
+            public boolean test(Person person) {
+                return person.getAge() >= retirementAge; // <-- compilation error
+            }
+        });
+    }
 
 If you try and compile this, you'll get a compiler failure when accessing the variable. This is because the variable isn't final. We'd need to add `final` to make it compile.
 

@@ -12,9 +12,7 @@ It formalised the notion of "lambda terms" and rules to transform those terms. T
 Here's an example of a lambda-calculus expression.
 
 {title="A lambda-calculus expression", lang="text", line-numbers="off"}
-~~~~~~~
-λx.x+1
-~~~~~~~
+    λx.x+1
 
 We define an anonymous function or "lambda" with an argument `x`. The body follows the dot and adds one to that argument.
 
@@ -25,9 +23,7 @@ It used the word `lambda` as an operator to define an anonymous function.
 Here's an example.
 
 {title="A LISP expression", lang="text", line-numbers="off"}
-~~~~~~~
-(lambda (arg) (+ arg 1))
-~~~~~~~
+    (lambda (arg) (+ arg 1))
 
 This LISP expression evaluates to a function, that when applied will take a single argument, bind it to `arg` and then add `1` to it.
 

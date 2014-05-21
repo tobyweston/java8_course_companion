@@ -2,12 +2,9 @@
 
 Let's jump in and have a look at the basic lambda syntax.
 
-A lambda is basically an anonymous block of functionality. It's a lot like using an anonymous class instance.
-
-For example, if we want to sort an array in Java, we can use the `Arrays.sort` method which takes an instance of a `Comparator`.
+A lambda is basically an anonymous block of functionality. It's a lot like using an anonymous class instance. For example, if we want to sort an array in Java, we can use the `Arrays.sort` method which takes an instance of a `Comparator`.
 
 It would look something like this.
-
 
     Arrays.sort(numbers, new Comparator<Integer>() {
         @Override
@@ -23,9 +20,7 @@ Using Java's new syntax, you can replace this with a lambda which looks like thi
 
     Arrays.sort(numbers, (first, second) -> first.compareTo(second));
 
-It's a more succinct way of achieving the same thing. In fact, Java treats this as if it were an instance of the `Comparator` class.
-
-If we were to extract a variable for the lambda (the second parameter), it's type would be `Comparator<Integer>` just like the anonymous instance above.
+It's a more succinct way of achieving the same thing. In fact, Java treats this as if it were an instance of the `Comparator` class. If we were to extract a variable for the lambda (the second parameter), it's type would be `Comparator<Integer>` just like the anonymous instance above.
 
 
     Comparator<Integer> ascending = (first, second) -> first.compareTo(second);
@@ -48,9 +43,6 @@ Let's say we have an an interface `Example` with a method `apply`, returning som
 
 We could instantiate an instance with something like this;
 
-new Example, override the method, implement the body.
-
-
     new Example() {
         @Override
         public R apply(A args) {
@@ -69,15 +61,15 @@ And to convert to a lambda, we basically trim the fat. We drop the instantiation
 we then introduce the new arrow symbol to indicate both that the whole thing is a lambda and that what follows is the body.
 
 
-    (args) -> { body }
+    (args) -> {
+        body
+    }
 
 
 and that's our basic lambda syntax.
 
 
-Let's take the sorting example from earlier through these steps.
-
-We start with the anonymous instance;
+Let's take the sorting example from earlier through these steps. We start with the anonymous instance;
 
 
     Arrays.sort(numbers, new Comparator<Integer>() {
@@ -118,9 +110,7 @@ and for simple expressions, you can drop the braces to produce a lambda expressi
 In this case, the compiler can infer enough to know what you mean. The single statement returns a value consistent with the interface, so it says, "no need to tell me that you're going to return something, I can see that for myself!".
 
 
-For single argument interface methods, you can even drop the first brackets. For example
-
-A lambda taking an argument `x` and returning `x + 1`
+For single argument interface methods, you can even drop the first brackets. For example the lambda taking an argument `x` and returning `x + 1`;
 
 
     (x) -> x + 1

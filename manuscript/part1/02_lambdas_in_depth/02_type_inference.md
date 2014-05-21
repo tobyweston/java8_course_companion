@@ -69,16 +69,16 @@ This is because the functional interface describes the types, it gives the compi
 For example, if we take an example functional interface.
 
     @FunctionalInterface
-	interface Calculation {
+    interface Calculation {
         Integer apply(Integer x, Integer y);
-	}
+    }
 
 
 When a lambda is used in-lieu of the interface, the first thing the compiler does is work out the "target" type of the lambda. So if we create a method `calculate` that takes the interface and two integers.
 
-	static Integer calculate(Calculation operation, Integer x, Integer y) {
-		return operation.apply(x, y);
-	}
+    static Integer calculate(Calculation operation, Integer x, Integer y) {
+        return operation.apply(x, y);
+    }
 
 and then create two lambdas; an addition and subtraction lambda
 
@@ -151,17 +151,17 @@ Our example of calling the `processNames` now compiles!
 
 Another common problem with type inference is when methods are chained together. Lets suppose we have a `List` class,
 
-	static class List<E> {
+    static class List<E> {
 
-		static <T> List<T> emptyList() {
-			return new List<T>();
-		}
+        static <T> List<T> emptyList() {
+            return new List<T>();
+        }
 
-		List<E> add(E e) {
-			// add element
-			return this;
-		}
-	}
+        List<E> add(E e) {
+            // add element
+            return this;
+        }
+    }
 
 and we want to chain a call to add an element to the method creating an empty list. Type erasure rears it's head again; the type is erased and so can't be known by the next method in the chain. It doesn't compile.
 

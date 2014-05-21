@@ -19,3 +19,4 @@ part1/02_lambdas_in_depth/03_method_references.md
 part1/02_lambdas_in_depth/04_scope_and_effectively_final.md
 part1/02_lambdas_in_depth/05_exception_handling.md
 part1/02_lambdas_in_depth/06_lambdas_vs_closures.md
+part1/02_lambdas_in_depth/07_invocation_and_bytecode.md

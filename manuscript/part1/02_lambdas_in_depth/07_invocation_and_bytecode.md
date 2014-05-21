@@ -134,8 +134,8 @@ JSR 292 (Supporting Dynamically Typed Languages on the Java™ Platform)[6] adde
  * `invokestatic` is used to call static methods of a class
  * `invokespecial` is used to call constructors, private methods and accessible methods of a super class
  * `invokevirtual` is used to cal public, protected an package protected method
-`invokeinterface` is used when the method being called belongs to an interface
-`invokedynamic` is used ...
+ * `invokeinterface` is used when the method being called belongs to an interface
+ * `invokedynamic` is used ...
 
 
 
@@ -145,7 +145,7 @@ JSR 292 (Supporting Dynamically Typed Languages on the Java™ Platform)[6] adde
 
 ## Code Examples
 
-Right, so we've had a refresher on bytecode, now lets have a look at the bytecode produced for some examples.
+Lets have a look at the bytecode produced for some examples.
 
 We're going to look at the bytecode for four distinct blocks of functionality based on the example we looked at in lambdas vs closures section.
 
@@ -241,10 +241,3 @@ When a lambda has arguments, we saw how the `LambdaMetafactory` describes the ar
 
 Lastly, we looked at a lambda that closes over a variable. This one creates an argument on the `lambda$` method handle and again is called with `invokestatic`.
 
-## Notes
-
-See [Zero Turnaournd](http://zeroturnaround.com/rebellabs/java-8-the-first-taste-of-lambdas/) post.
-
-[Takipi article](http://www.takipiblog.com/2014/01/16/compiling-lambda-expressions-scala-vs-java-8/) talks about dynamically linking the call site to the actual lambda function. Invoke dynamic allows languages (originally intended for dynamic languages) to bind symbols at run-time rather than do all the linkage statically when the code is compiled.
-
-Usually there's an implicit parameter to anonymous functions; `this`. Lambdas are defined as static functions and so avoid the `this` parameter.

@@ -127,25 +127,25 @@ Lets have a look at how we might actually use a constructor reference.
 
 If we create a list of objects we might want to populate that list say ten items. So we could create a loop and add a new object ten times.
 
-	public void usage() {
-		List<Object> list = new ArrayList<>();
-		for (int i = 0; i < 10; i++) {
-			list.add(new Object());
-		}
-	}
+    public void usage() {
+        List<Object> list = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            list.add(new Object());
+        }
+    }
 
 but if we want to be able to reuse that initialising function, we could extract the code to a new method called `initialise` and then use a factory to create the object.
 
     public void usage() {
-		List<Object> list = new ArrayList<>();
-		initialise(list, ...);
-	}
+        List<Object> list = new ArrayList<>();
+        initialise(list, ...);
+    }
 
-	private void initialise(List<Object> list, Factory<Object> factory) {
-		for (int i = 0; i < 10; i++) {
-			list.add(factory.create());
-		}
-	}
+    private void initialise(List<Object> list, Factory<Object> factory) {
+        for (int i = 0; i < 10; i++) {
+            list.add(factory.create());
+        }
+    }
 
 The `Factory` class is just a functional interface with a method called `create` that returns some object. We can then add the object it created to the list. Because it's a functional interface, we can use a lambda to implement the factory to initialise the list;
 
@@ -165,15 +165,15 @@ Or we could swap in a constructor reference.
 There's a couple of other things we could do here. If we add some generics to the `initialise` method we can reuse it when initialising lists of any type. For example, we can go back and change the type of the list to be `String` and use a constructor reference to initialise it.
 
     public void usage() {
-		List<String> list = new ArrayList<>();
-		initialise(list, String::new);
-	}
+        List<String> list = new ArrayList<>();
+        initialise(list, String::new);
+    }
 
-	private <T> void initialise(List<T> list, Factory<T> factory) {
-		for (int i = 0; i < 10; i++) {
-			list.add(factory.create());
-		}
-	}
+    private <T> void initialise(List<T> list, Factory<T> factory) {
+        for (int i = 0; i < 10; i++) {
+            list.add(factory.create());
+        }
+    }
 
 
 

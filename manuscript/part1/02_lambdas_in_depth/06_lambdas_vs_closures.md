@@ -56,7 +56,9 @@ The `server` parameter is supplied by our `waitFor` method and will be the insta
 A>
 A> Incidentally, we might have been able to use a method reference...
 A>
+A> ~~~~~~~~~~~~~~~
 A>    waitFor(new HttpServer(), HttpServer::isRunning); // nowhere do you put the !
+A> ~~~~~~~~~~~~~~~
 A>
 A> but we can't as we can't negate method references. You get a compile error.
 A>
@@ -64,19 +66,19 @@ A>
 
 Now, if we re-implement this as a closure, it would look like this. Firstly, we have to add another `waitFor` method.
 
-	static void waitFor(Condition condition) throws InterruptedException {
-		while (!condition.isSatisfied())
-			Thread.sleep(250);
-	}
+    static void waitFor(Condition condition) throws InterruptedException {
+        while (!condition.isSatisfied())
+            Thread.sleep(250);
+    }
 
 This time, with a simpler signature. We pass in a functional interface that requires no parameters. The `Condition` interface has a simple `isSatisfied` method with no argument which implies we'll have to supply any values an implementation might need. It's already hinting that usages of it may result in closures.
 
 Using it, we'd write something like this.
 
-	void closure() throws InterruptedException {
-		Server server = new HttpServer();
-		waitFor(() -> !server.isRunning());
-	}
+    void closure() throws InterruptedException {
+        Server server = new HttpServer();
+        waitFor(() -> !server.isRunning());
+    }
 
 The server instance is not passed as a parameter to the lambda here but accessed from the enclosing scope. We've defined the variable and the lambda uses it directly. This variable has to be captured, or copied by the compiler. The lambda "closes over" the `server` variable.
 
