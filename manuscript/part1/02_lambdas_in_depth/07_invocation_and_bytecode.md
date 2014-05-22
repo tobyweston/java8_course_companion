@@ -416,13 +416,27 @@ Lastly, example 5 uses a lambda but closes over the `server` instance. It's equi
     }
 
 
-It goes through the basics in the same way as the other lambdas but if we lookup the `metafactory` method in the bootstrap methods table, you'll notice that this time, the lambda's method handle has an argument of type `Server`. It's invoked using `invokestatic` and the variable is passed directly into the lambda at invocation time.
+It goes through the basics in the same way as the other lambdas but if we lookup the `metafactory` method in the bootstrap methods table, you'll notice that this time, the lambda's method handle has an argument of type `Server`. It's invoked using `invokestatic` (line 9.) and the variable is passed directly into the lambda at invocation time.
+
+{lang="java", line-numbers="on"}
+    BootstrapMethods:
+        0: #34 invokestatic LambdaMetafactory.metafactory:
+                (LMethodHandles$Lookup;
+                 LString;LMethodType;
+                 LMethodType;
+                 LMethodHandle;LMethodType;)LCallSite;
+          Method arguments:
+            #35 ()LBoolean; // <-- SAM method to be implemented by the lambda
+            #36 invokestatic jdk8/byte_code/Example5.lambda$example$35:(Ljdk8/byte_code/Server;)LBoolean;
+            #35 ()LBoolean; // <-- signature and return type to be enforced at invocation time
+
 
 So like the anonymous class in example 2, an argument is added by the compiler to capture the term although this time, it's a method argument rather than a constructor argument.
 
+
 ### Summary
 
-So, we saw how using an anonymous class will create a new instance and call it's constructor with `invokespecial`.
+We saw how using an anonymous class will create a new instance and call it's constructor with `invokespecial`.
 
 We saw anonymous classes that close over variables have an extra argument on their constructor to capture that variable.
 
