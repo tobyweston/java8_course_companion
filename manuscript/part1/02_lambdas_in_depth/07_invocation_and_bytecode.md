@@ -117,7 +117,6 @@ We can group the opcodes into the following categories.
 Instructions concerned with stack manipulation, like we've seen before. Examples being `aload`, `istore` etc. To control program flow with things like if and while, we use opcodes like `goto` and `if equal`. Creating objects and accessing methods use codes like `new` and `invokespecial`. We'll be particularly interested in this group when we look at the different opcodes used to invoke lambdas. The last group is about arithmetic, logic and type conversion and includes codes like `iadd`, float compare long (fcmpl) and integer to byte (`i2b`).
 
 
-{pagebreak}
 
 ### Descriptors
 
@@ -192,7 +191,7 @@ We'll explore
 1. A lambda with arguments
 1. A lambda closing over some variable (a new style closure)
 
-The example bytecode was generated using the `javap` command line tool. Only partial bytecode listings are shown in this section, for full source and bytecode listsings, see [Appendix A](#appendix_a).
+The example bytecode was generated using the `javap` command line tool. Only partial bytecode listings are shown in this section, for full source and bytecode listsings, see [Appendix A](#appendix_a). Also, fully qualified class names have been shortened to better fit on the page.
 
 ### Example 1
 
@@ -211,19 +210,19 @@ The first example is a simple anonymous class instance passed into our `waitFor`
         }
     }
 
-If we look at the bytecode, the thing to notice is that an instance of the anonymous class is newed up. The #2 refers to a lookup, the result of which is shown in the comment. So it uses the `new` opcode with whatever is at #2 in the constant pool, this happens to be the class anonymous class.
+If we look at the bytecode, the thing to notice is that an instance of the anonymous class is newed up at line 6. The #2 refers to a lookup, the result of which is shown in the comment. So it uses the `new` opcode with whatever is at #2 in the constant pool, this happens to be the anonymous class `Example$1`.
 
-{lang="text"}
+{lang="java", line-numbers="on"}
       void example() throws java.lang.InterruptedException;
         descriptor: ()V
         flags:
         Code:
           stack=3, locals=1, args_size=1
-             0: new           #2  // class Example1$1 <- **class is instantiated here**
+             0: new           #2  // class Example1$1
              3: dup
              4: aload_0
-             5: invokespecial #3  // Method Example1$1."<init>":(Ljdk8/byte_code/Example1;)V
-             8: invokestatic  #4  // Method WaitFor.waitFor:(Ljdk8/byte_code/Condition;)V
+             5: invokespecial #3  // Method Example1$1."<init>":(LExample1;)V
+             8: invokestatic  #4  // Method WaitFor.waitFor:(LCondition;)V
             11: return
           LineNumberTable:
             line 10: 0
@@ -235,18 +234,47 @@ If we look at the bytecode, the thing to notice is that an instance of the anony
           throws java.lang.InterruptedException
 
 
-Once created, the constructor is called using `invokespecial`. This opcode is used to call constructor methods, private methods and accessible methods of a super class. You might notice the method descriptor includes a reference to `Example1`. All anonymous class instances have this implicit reference to the parent class.
+Once created, the constructor is called using `invokespecial` on line 9. This opcode is used to call constructor methods, private methods and accessible methods of a super class. You might notice the method descriptor includes a reference to `Example1`. All anonymous class instances have this implicit reference to the parent class.
 
-The next step uses 'invokestatic' to call our `waitFor` method passing in the anonymous class. `invokestatic` is used to call static methods and is very fast as it can direct dial a method rather than figure out which to call as would be the case in an object hierarchy.
+The next step uses 'invokestatic' to call our `waitFor` method passing in the anonymous class on line 10. `invokestatic` is used to call static methods and is very fast as it can direct dial a method rather than figure out which to call as would be the case in an object hierarchy.
 
 
 ### Example 2
 
 Example 2 is another anonymous class but this time it closes over the `server` variable. It's an old style closure.
 
-The bytecode is similar to the previous except that an instance of the `Server` class is new'ed up and it's constructor called. The instance of the anonymous class `$1` is still constructed ut this time it takes the instance of `Server` as an argument as well as the instance of the calling class.
+    public class Example2 {
+        // anonymous class (closure)
+        void example() throws InterruptedException {
+            Server server = new HttpServer();
+            waitFor(new Condition() {
+                @Override
+                public Boolean isSatisfied() {
+                    return !server.isRunning();
+                }
+            });
+        }
+    }
+
+
+The bytecode is similar to the previous except that an instance of the `Server` class is newed up (at line 3.) and it's constructor called at line 5. The instance of the anonymous class `$1` is still constructed with `invokespecial` (at line 11.) but this time it takes the instance of `Server` as an argument as well as the instance of the calling class.
 
 To close over the `server` variable, it's passed directly into the anonymous class.
+
+{lang="java", line-numbers="on"}
+      void example() throws java.lang.InterruptedException;
+        Code:
+           0: new           #2      // class Server$HttpServer
+           3: dup
+           4: invokespecial #3      // Method Server$HttpServer."<init>":()V
+           7: astore_1
+           8: new           #4      // class Example2$1
+          11: dup
+          12: aload_0
+          13: aload_1
+          14: invokespecial #5      // Method Example2$1."<init>":(LExample2;LServer;)V
+          17: invokestatic  #6      // Method WaitFor.waitFor:(LCondition;)V
+          20: return
 
 
 ### Example 3
