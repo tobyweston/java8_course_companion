@@ -549,7 +549,7 @@
 
 
 
-{lang="text"}
+{lang="java"}
     Classfile Example4_method_reference.class
       Last modified 08-May-2014; size 1271 bytes
       MD5 checksum f8aef942361f29ef599adfec7a594948
