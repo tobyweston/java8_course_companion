@@ -326,6 +326,7 @@ The actual lambda is shown as a method handle called `lambda$example$25` (line 1
 
 It's passed into the `LambdaMetafactory` and we know it's a method handle by looking it up in the constant pool. The number of the lambda is compiler assigned and just increments from zero for each lambda required.
 
+{lang="java", line-numbers="on"}
     Constant pool:
         #25 = MethodHandle    #6:#35  //  invokestatic Example3.lambda$example$25:()LBoolean;
 
@@ -334,7 +335,35 @@ It's passed into the `LambdaMetafactory` and we know it's a method handle by loo
 
 Example 4 is another lambda but this time it takes an instance of `Server` as an argument. It's equivalent in functionality to example 2 but it doesn't close over the variable; it's not a closure.
 
-Just like example 2, the bytecode has to create the instance of server but this time, the `invokedynamic` opcode references the `test` method of type `Predicate`. If we follow the reference (#4) to the boostrap methods table, we see the actual lambda requires an argument of type `HttpServer` and returns a `Z` which is a primitive boolean.
+    public class Example4 {
+        // lambda with arguments
+        void example() throws InterruptedException {
+            waitFor(new HttpServer(), (server) -> server.isRunning());
+        }
+    }
+
+Just like example 2, the bytecode has to create the instance of server but this time, the `invokedynamic` opcode references the `test` method of type `Predicate`. If we were to follow the reference (#4) to the boostrap methods table, we would see the actual lambda requires an argument of type `HttpServer` and returns a `Z` which is a primitive boolean.
+
+{lang="java", line-numbers="on"}
+    void example() throws java.lang.InterruptedException;
+        descriptor: ()V
+        flags: 
+        Code:
+          stack=2, locals=1, args_size=1
+             0: new           #2       // class Server$HttpServer
+             3: dup           
+             4: invokespecial #3       // Method Server$HttpServer."<init>":()V
+             7: invokedynamic #4,  0   // InvokeDynamic #0:test:()LPredicate;
+            12: invokestatic  #5       // Method WaitFor.waitFor:(LObject;LPredicate;)V
+            15: return        
+          LineNumberTable:
+            line 13: 0
+            line 15: 15
+          LocalVariableTable:
+            Start  Length  Slot  Name   Signature
+                0      16     0  this   LExample4;
+        Exceptions:
+          throws java.lang.InterruptedException
 
 So the call to the lambda is still a static method call like before but this time takes the variable as a parameter when it's invoked.
 
@@ -343,12 +372,49 @@ So the call to the lambda is still a static method call like before but this tim
 
 Interestingly, if we use a method reference instead, the functionality is exactly the same but we get different bytecode.
 
+    public class Example4_method_reference {
+        // lambda with method reference
+        void example() throws InterruptedException {
+            waitFor(new HttpServer(), HttpServer::isRunning);
+        }
+    }
+
 Via the call to the `LambdaMetafactory` when the final execution occurs, the method reference results in a call to `invokevirtual` rather than `invokestatic`. `invokevirtual` is used to call public, protected an package protected methods so it implies an instance is required. The instance is supplied to the `metafactory` method and no lambda (or static function) is needed at all; there are no `lambda$` in this bytecode.
+
+{lang="java", line-numbers="on"}
+    void example() throws java.lang.InterruptedException;
+        descriptor: ()V
+        flags: 
+        Code:
+          stack=2, locals=1, args_size=1
+             0: new           #2         // class Server$HttpServer
+             3: dup           
+             4: invokespecial #3         // Method Server$HttpServer."<init>":()V
+             7: invokedynamic #4,  0     // InvokeDynamic #0:test:()LPredicate;
+            12: invokestatic  #5         // Method WaitFor.waitFor:(LObject;LPredicate;)V
+            15: return        
+          LineNumberTable:
+            line 11: 0
+            line 12: 15
+          LocalVariableTable:
+            Start  Length  Slot  Name   Signature
+                0      16     0  this   LExample4_method_reference;
+        Exceptions:
+          throws java.lang.InterruptedException
 
 
 ### Example 5
 
 Lastly, example 5 uses a lambda but closes over the `server` instance. It's equivalent to example 2 and is a new style closure.
+
+    public class Example5 {
+        // closure
+        void example() throws InterruptedException {
+            Server server = new HttpServer();
+            waitFor(() -> !server.isRunning());
+        }
+    }
+
 
 It goes through the basics in the same way as the other lambdas but if we lookup the `metafactory` method in the bootstrap methods table, you'll notice that this time, the lambda's method handle has an argument of type `Server`. It's invoked using `invokestatic` and the variable is passed directly into the lambda at invocation time.
 
