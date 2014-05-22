@@ -467,6 +467,5 @@ Note that the syntax for a static method reference looks very similar to a refer
 
 You can think of the whole thing as a transformation from a method reference to a lambda. The compiler provides the _transformation_ function that takes a method reference and target typing and can derive a lambda.
 
-![](images/transformation.png]
 
 

@@ -29,7 +29,7 @@ As an aside, Scala can usually figure out when you're finished, so you don't oft
 
 Type inference is a fairly broad topic, Java doesn't support the type of inference I've just been talking about, at least for things like dropping the type annotations for variables. We have to keep that in.
 
-    String name = "Henry"; <- we can't drop the String like Scala
+    String name = "Henry"; // <- we can't drop the String like Scala
 
 
 So Java doesn't support type inference in the widest sense. It can't guess _everything_ like some languages. Type inference for Java then typically refers to the way the compiler can work out types for generics. Java 7 improved this when it introduced the diamond operator (`<>`) but there are still lots of limitations in what Java _can_ figure out.

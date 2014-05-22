@@ -71,20 +71,20 @@ If you wanted to make this clearer, you can also override the functional method 
 We can verify it works as a functional interface if we use it as a lambda. So I'll implement a little method here to show that a lambda can be assigned to a type of `A` and a type of `B`. The implementation just prints out "A" or "B".
 
 
-	@FunctionalInterface
-	public interface A {
-		void apply();
-	}
+    @FunctionalInterface
+    public interface A {
+        void apply();
+    }
 
-	public interface B extends A {
-		@Override
-		void apply();
-	}
+    public interface B extends A {
+        @Override
+        void apply();
+    }
 
-	public static void main(String... args) {
-		A a = () -> System.out.println("A");
-		B b = () -> System.out.println("B");
-	}
+    public static void main(String... args) {
+        A a = () -> System.out.println("A");
+        B b = () -> System.out.println("B");
+    }
 
 You can't add a new abstract method to the extending interface though, as the resulting type would have two abstract methods and so the IDE will warn us and the compiler will error.
 

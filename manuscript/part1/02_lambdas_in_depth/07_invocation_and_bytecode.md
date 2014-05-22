@@ -213,7 +213,6 @@ The first example is a simple anonymous class instance passed into our `waitFor`
 If we look at the bytecode, the thing to notice is that an instance of the anonymous class is newed up at line 6. The #2 refers to a lookup, the result of which is shown in the comment. So it uses the `new` opcode with whatever is at #2 in the constant pool, this happens to be the anonymous class `Example$1`.
 
 {lang="java", line-numbers="on"}
-    {lang="java", line-numbers="on"}
     void example() throws java.lang.InterruptedException;
         descriptor: ()V
         flags:
