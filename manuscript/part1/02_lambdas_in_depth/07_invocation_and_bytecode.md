@@ -5,7 +5,7 @@ In this section we'll explore how the compiler output differs when you compile a
 
 ### Bytecode Recap
 
-To start with then, let's recap on what we know about bytecode.
+To start with, let's recap on what we know about bytecode.
 
 To get from source code to machine runnable code. The Java compiler produces bytecode. This is either interpreted by the JVM or re-compiled by the Just-in-time compiler.
 
@@ -25,27 +25,85 @@ The bytecode is the instruction set of the JVM. As it's name suggests, bytecode 
 
 The JVM uses a [stack based computation model](http://en.wikipedia.org/wiki/Model_of_computation), if we want to increment a number, we have to do it using the stack. All instructions or opcodes work against the stack.
 
-So for example, `5 + 1` becomes `5 1 +`
+So for example, `5 + 1` becomes `5 1 +`  where `5` is pushed to the stack,
 
-IMAGE
-
- where `5` is pushed to the stack,
-
-IMAGE
+{lang="text"}
+                    +---------+
+    push 5  ----->  |    5    |
+                    +---------+
+                    |         |
+                    +---------+
+                    |         |
+                    +---------+
 
 `1` is pushed then...
 
-IMAGE
+{lang="text"}
+                    +---------+
+    push 1  ----->  |    1    |
+                    +---------+
+                    |    5    |
+                    +---------+
+                    |         |
+                    +---------+
 
-the `+` operator is applied. Plus would pop the top two frames, add the numbers together and push the result back onto the stack.
+the `+` operator is applied. Plus would pop the top two frames, add the numbers together and push the result back onto the stack. The result would look like this.
 
-The result would look like this.
+{lang="text"}
+                    +---------+
+    add     ----->  |    6    |
+                    +---------+
+                    |         |
+                    +---------+
+                    |         |
+                    +---------+
 
-IMAGE
 
-Each opcode works against the stack like this so we can translate our example into a sequence of bytecodes
+Each opcode works against the stack like this so we can translate our example into a sequence of bytecodes;
 
-push 5 becomes `iconst_5` push 1 becomes `iconst_1` and `add` becomes `iadd`. `iconst_x` and `iadd` are examples of opcodes. Opcodes often have prefixes and/or suffices to indicate the types they work on, `i` in these examples refers to `integer`.
+{lang="text"}
+                    +---------+
+    push 5  ----->  |    5    |
+                    +---------+
+                    |         |
+                    +---------+
+                    |         |
+                    +---------+
+
+`push` 5 becomes `iconst_5`.
+
+{lang="text"}
+                      +---------+
+    iconst_5  ----->  |    5    |
+                      +---------+
+                      |         |
+                      +---------+
+                      |         |
+                      +---------+
+
+push 1 becomes `iconst_1`
+
+{lang="text"}
+                      +---------+
+    iconst_1  ----->  |    1    |
+                      +---------+
+                      |    5    |
+                      +---------+
+                      |         |
+                      +---------+
+
+and `add` becomes `iadd`.
+
+{lang="text"}
+                      +---------+
+    iadd      ----->  |    6    |
+                      +---------+
+                      |         |
+                      +---------+
+                      |         |
+                      +---------+
+
+`iconst_x` and `iadd` are examples of opcodes. Opcodes often have prefixes and/or suffices to indicate the types they work on, `i` in these examples refers to `integer`.
 
 We can group the opcodes into the following categories.
 
@@ -56,13 +114,7 @@ We can group the opcodes into the following categories.
 | Object interactions                         | `new`, `invokespecial`, `areturn`
 | Arithmetic, logic and type conversion       | `iadd`, `fcmpl`, `i2b`
 
-Instructions concerned with stack manipulation, like we've seen before. Examples being `aload`, `istore` etc.
-
-To control program flow with things like if and while, we use opcodes like `goto` and `if equal`.
-
-Creating objects and accessing methods use codes like `new` and `invokespecial`. We'll be particularly interested in this group when we look at the different opcodes used to invoke lambdas.
-
-The last group is about arithmetic, logic and type conversion and includes codes like `iadd`, float compare long (fcmpl) and integer to byte (`i2b`).
+Instructions concerned with stack manipulation, like we've seen before. Examples being `aload`, `istore` etc. To control program flow with things like if and while, we use opcodes like `goto` and `if equal`. Creating objects and accessing methods use codes like `new` and `invokespecial`. We'll be particularly interested in this group when we look at the different opcodes used to invoke lambdas. The last group is about arithmetic, logic and type conversion and includes codes like `iadd`, float compare long (fcmpl) and integer to byte (`i2b`).
 
 
 
