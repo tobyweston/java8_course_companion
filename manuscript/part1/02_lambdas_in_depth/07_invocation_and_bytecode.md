@@ -164,12 +164,12 @@ The first argument is of type int, so we use an uppercase `I`.
 The next argument is an object, so we use `L` to describe it's an object, fully qualify the name and close it with a semi-colon.
 
 {lang="text"}
-    (ILjava/lang/String;)J
+    (ILString;)J
 
 The last argument is an integer array so we drop in the array syntax followed by int type.
 
 {lang="text"}
-    (ILjava/lang/String;[I)J
+    (ILString;[I)J
 
 
 and we're done. A JVM method descriptor.
@@ -213,25 +213,25 @@ The first example is a simple anonymous class instance passed into our `waitFor`
 If we look at the bytecode, the thing to notice is that an instance of the anonymous class is newed up at line 6. The #2 refers to a lookup, the result of which is shown in the comment. So it uses the `new` opcode with whatever is at #2 in the constant pool, this happens to be the anonymous class `Example$1`.
 
 {lang="java", line-numbers="on"}
-      void example() throws java.lang.InterruptedException;
-        descriptor: ()V
-        flags:
-        Code:
-          stack=3, locals=1, args_size=1
-             0: new           #2  // class Example1$1
-             3: dup
-             4: aload_0
-             5: invokespecial #3  // Method Example1$1."<init>":(LExample1;)V
-             8: invokestatic  #4  // Method WaitFor.waitFor:(LCondition;)V
-            11: return
-          LineNumberTable:
-            line 10: 0
-            line 16: 11
-          LocalVariableTable:
-            Start  Length  Slot  Name   Signature
-                0      12     0  this   LExample1;
-        Exceptions:
-          throws java.lang.InterruptedException
+void example() throws java.lang.InterruptedException;
+    descriptor: ()V
+    flags:
+    Code:
+      stack=3, locals=1, args_size=1
+         0: new           #2  // class Example1$1
+         3: dup
+         4: aload_0
+         5: invokespecial #3  // Method Example1$1."<init>":(LExample1;)V
+         8: invokestatic  #4  // Method WaitFor.waitFor:(LCondition;)V
+        11: return
+      LineNumberTable:
+        line 10: 0
+        line 16: 11
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0      12     0  this   LExample1;
+    Exceptions:
+      throws java.lang.InterruptedException
 
 
 Once created, the constructor is called using `invokespecial` on line 9. This opcode is used to call constructor methods, private methods and accessible methods of a super class. You might notice the method descriptor includes a reference to `Example1`. All anonymous class instances have this implicit reference to the parent class.
@@ -262,7 +262,7 @@ The bytecode is similar to the previous except that an instance of the `Server` 
 To close over the `server` variable, it's passed directly into the anonymous class.
 
 {lang="java", line-numbers="on"}
-      void example() throws java.lang.InterruptedException;
+    void example() throws java.lang.InterruptedException;
         Code:
            0: new           #2      // class Server$HttpServer
            3: dup
@@ -281,23 +281,53 @@ To close over the `server` variable, it's passed directly into the anonymous cla
 
 Example 3 uses a Java 8 lambda with our `waitFor` method. The lambda doesn't do anything other than return `true`. It's equivalent to example 1.
 
-The bytecode is super simple this time. It uses the `invokedynamic` opcode to create the lambda which is then passed to the `invokestatic` opcode on the next line.
+    public class Example3 {
+        // simple lambda
+        void example() throws InterruptedException {
+            waitFor(() -> true);
+        }
+    }
 
-The descriptor for the `invokedynamic` call is targeting the `isSatisfied` method on the `Condition` interface. We'll talk about the #0 in a moment.
+The bytecode is super simple this time. It uses the `invokedynamic` opcode to create the lambda at line 3. which is then passed to the `invokestatic` opcode on the next line.
 
-What we're not seeing here is the mechanics of `invokedynamic`. `invokedynamic` is a new opcode to Java 7, it was intended to provide better support for dynamic languages on the JVM. It does this by not linking the types to methods until run-time.
+{lang="java", line-numbers="on"}
+    void example() throws java.lang.InterruptedException;
+        Code:
+           0: invokedynamic #2,  0              // InvokeDynamic #0:isSatisfied:()LCondition;
+           5: invokestatic  #3                  // Method WaitFor.waitFor:(LCondition;)V
+           8: return
 
-The other invoke opcodes all resolve types at compile time.
+The descriptor for the `invokedynamic` call is targeting the `isSatisfied` method on the `Condition` interface (line 3.).
+
+What we're not seeing here is the mechanics of `invokedynamic`. `invokedynamic` is a new opcode to Java 7, it was intended to provide better support for dynamic languages on the JVM. It does this by not linking the types to methods until run-time. The other "invoke" opcodes all resolve types at compile time.
 
 For lambdas, this means that placeholder method invocations can be put into the bytecode like we've just seen and working out the implementation can be done on the JVM at runtime.
 
 If we look at a more verbose bytecode that includes the constant pool we can dereference the lookups. For example, if we look up number 2, we can see it references #0 and #26.
 
-The constant 0 is in a special lookup table for bootstrapping methods. It refers to a static method call to the JDK `LambdaMetafactory` to create the lambda. This is where the heavy lifting goes on. All the target type inference to adapt types and any partial argument evaluation goes on here.
+{lang="java", line-numbers="on"}
+    Constant pool:
+       #1 = Methodref          #6.#21    //  Object."<init>":()V
+       #2 = InvokeDynamic      #0:#26    //  #0:isSatisfied:()LCondition;
+       ...
+    BootstrapMethods:
+        0: #23 invokestatic LambdaMetafactory.metafactory:
+                (LMethodHandles$Lookup;LString;
+                LMethodType;LMethodType;
+                LMethodHandle;LMethodType;)LCallSite;
+          Method arguments:
+            #24 ()LBoolean;
+            #25 invokestatic Example3.lambda$example$25:()LBoolean;
+            #24 ()LBoolean;
 
-The actual lambda is shown as a method handle called `lambda$example$25` with no arguments, returning a boolean. It's invoked using `invokestatic` which shows that it's accessed as a genuine function; there's no object associated with it. There's also no implicit reference to a containing class unlike the anonymous examples before.
+The constant 0 is in a special lookup table for bootstrapping methods (line 6.). It refers to a static method call to the JDK `LambdaMetafactory` to create the lambda. This is where the heavy lifting goes on. All the target type inference to adapt types and any partial argument evaluation goes on here.
+
+The actual lambda is shown as a method handle called `lambda$example$25` (line 12.) with no arguments, returning a boolean. It's invoked using `invokestatic` which shows that it's accessed as a genuine function; there's no object associated with it. There's also no implicit reference to a containing class unlike the anonymous examples before.
 
 It's passed into the `LambdaMetafactory` and we know it's a method handle by looking it up in the constant pool. The number of the lambda is compiler assigned and just increments from zero for each lambda required.
+
+    Constant pool:
+        #25 = MethodHandle    #6:#35  //  invokestatic Example3.lambda$example$25:()LBoolean;
 
 
 ### Example 4
