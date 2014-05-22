@@ -24,23 +24,23 @@
 
 ### Example 1
 
-package jdk8.byte_code;
+    package jdk8.byte_code;
 
-import static jdk8.byte_code.WaitFor.waitFor;
+    import static jdk8.byte_code.WaitFor.waitFor;
 
-@SuppressWarnings("all")
-public class Example1 {
+    @SuppressWarnings("all")
+    public class Example1 {
 
-    // anonymous class
-    void example() throws InterruptedException {
-        waitFor(new Condition() {
-            @Override
-            public Boolean isSatisfied() {
-                return true;
-            }
-        });
+        // anonymous class
+        void example() throws InterruptedException {
+            waitFor(new Condition() {
+                @Override
+                public Boolean isSatisfied() {
+                    return true;
+                }
+            });
+        }
     }
-}
 
 {lang="text"}
     Classfile Example1.class
@@ -124,6 +124,7 @@ public class Example1 {
 
  
 {pagebreak}
+
 
 ### Example 2
 
@@ -385,6 +386,7 @@ public class Example1 {
 
 {pagebreak}
  
+
 ### Example 4
 
     package jdk8.byte_code;

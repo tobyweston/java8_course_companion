@@ -213,25 +213,26 @@ The first example is a simple anonymous class instance passed into our `waitFor`
 If we look at the bytecode, the thing to notice is that an instance of the anonymous class is newed up at line 6. The #2 refers to a lookup, the result of which is shown in the comment. So it uses the `new` opcode with whatever is at #2 in the constant pool, this happens to be the anonymous class `Example$1`.
 
 {lang="java", line-numbers="on"}
-void example() throws java.lang.InterruptedException;
-    descriptor: ()V
-    flags:
-    Code:
-      stack=3, locals=1, args_size=1
-         0: new           #2  // class Example1$1
-         3: dup
-         4: aload_0
-         5: invokespecial #3  // Method Example1$1."<init>":(LExample1;)V
-         8: invokestatic  #4  // Method WaitFor.waitFor:(LCondition;)V
-        11: return
-      LineNumberTable:
-        line 10: 0
-        line 16: 11
-      LocalVariableTable:
-        Start  Length  Slot  Name   Signature
-            0      12     0  this   LExample1;
-    Exceptions:
-      throws java.lang.InterruptedException
+    {lang="java", line-numbers="on"}
+    void example() throws java.lang.InterruptedException;
+        descriptor: ()V
+        flags:
+        Code:
+          stack=3, locals=1, args_size=1
+             0: new           #2  // class Example1$1
+             3: dup
+             4: aload_0
+             5: invokespecial #3  // Method Example1$1."<init>":(LExample1;)V
+             8: invokestatic  #4  // Method WaitFor.waitFor:(LCondition;)V
+            11: return
+          LineNumberTable:
+            line 10: 0
+            line 16: 11
+          LocalVariableTable:
+            Start  Length  Slot  Name   Signature
+                0      12     0  this   LExample1;
+        Exceptions:
+          throws java.lang.InterruptedException
 
 
 Once created, the constructor is called using `invokespecial` on line 9. This opcode is used to call constructor methods, private methods and accessible methods of a super class. You might notice the method descriptor includes a reference to `Example1`. All anonymous class instances have this implicit reference to the parent class.
@@ -264,16 +265,16 @@ To close over the `server` variable, it's passed directly into the anonymous cla
 {lang="java", line-numbers="on"}
     void example() throws java.lang.InterruptedException;
         Code:
-           0: new           #2      // class Server$HttpServer
+           0: new           #2  // class Server$HttpServer
            3: dup
-           4: invokespecial #3      // Method Server$HttpServer."<init>":()V
+           4: invokespecial #3  // Method Server$HttpServer."<init>":()V
            7: astore_1
-           8: new           #4      // class Example2$1
+           8: new           #4  // class Example2$1
           11: dup
           12: aload_0
           13: aload_1
-          14: invokespecial #5      // Method Example2$1."<init>":(LExample2;LServer;)V
-          17: invokestatic  #6      // Method WaitFor.waitFor:(LCondition;)V
+          14: invokespecial #5  // Method Example2$1."<init>":(LExample2;LServer;)V
+          17: invokestatic  #6  // Method WaitFor.waitFor:(LCondition;)V
           20: return
 
 
@@ -293,8 +294,8 @@ The bytecode is super simple this time. It uses the `invokedynamic` opcode to cr
 {lang="java", line-numbers="on"}
     void example() throws java.lang.InterruptedException;
         Code:
-           0: invokedynamic #2,  0              // InvokeDynamic #0:isSatisfied:()LCondition;
-           5: invokestatic  #3                  // Method WaitFor.waitFor:(LCondition;)V
+           0: invokedynamic #2,  0   // InvokeDynamic #0:isSatisfied:()LCondition;
+           5: invokestatic  #3       // Method WaitFor.waitFor:(LCondition;)V
            8: return
 
 The descriptor for the `invokedynamic` call is targeting the `isSatisfied` method on the `Condition` interface (line 3.).
@@ -328,8 +329,11 @@ It's passed into the `LambdaMetafactory` and we know it's a method handle by loo
 
 {lang="java", line-numbers="on"}
     Constant pool:
-        #25 = MethodHandle    #6:#35  //  invokestatic Example3.lambda$example$25:()LBoolean;
+        // invokestatic Example3.lambda$example$25:()LBoolean;
+        #25 = MethodHandle   #6:#35
 
+
+{pagebreak}
 
 ### Example 4
 
@@ -350,11 +354,11 @@ Just like example 2, the bytecode has to create the instance of server but this 
         flags: 
         Code:
           stack=2, locals=1, args_size=1
-             0: new           #2       // class Server$HttpServer
+             0: new           #2     // class Server$HttpServer
              3: dup           
-             4: invokespecial #3       // Method Server$HttpServer."<init>":()V
-             7: invokedynamic #4,  0   // InvokeDynamic #0:test:()LPredicate;
-            12: invokestatic  #5       // Method WaitFor.waitFor:(LObject;LPredicate;)V
+             4: invokespecial #3     // Method Server$HttpServer."<init>":()V
+             7: invokedynamic #4, 0  // InvokeDynamic #0:test:()LPredicate;
+            12: invokestatic  #5     // Method WaitFor.waitFor:(LObject;LPredicate;)V
             15: return        
           LineNumberTable:
             line 13: 0
@@ -367,6 +371,8 @@ Just like example 2, the bytecode has to create the instance of server but this 
 
 So the call to the lambda is still a static method call like before but this time takes the variable as a parameter when it's invoked.
 
+
+{pagebreak}
 
 ### Example 4 (with method reference)
 
@@ -387,11 +393,11 @@ Via the call to the `LambdaMetafactory` when the final execution occurs, the met
         flags: 
         Code:
           stack=2, locals=1, args_size=1
-             0: new           #2         // class Server$HttpServer
+             0: new           #2     // class Server$HttpServer
              3: dup           
-             4: invokespecial #3         // Method Server$HttpServer."<init>":()V
-             7: invokedynamic #4,  0     // InvokeDynamic #0:test:()LPredicate;
-            12: invokestatic  #5         // Method WaitFor.waitFor:(LObject;LPredicate;)V
+             4: invokespecial #3     // Method Server$HttpServer."<init>":()V
+             7: invokedynamic #4, 0  // InvokeDynamic #0:test:()LPredicate;
+            12: invokestatic  #5     // Method WaitFor.waitFor:(LObject;LPredicate;)V
             15: return        
           LineNumberTable:
             line 11: 0
@@ -427,12 +433,14 @@ It goes through the basics in the same way as the other lambdas but if we lookup
                  LMethodHandle;LMethodType;)LCallSite;
           Method arguments:
             #35 ()LBoolean; // <-- SAM method to be implemented by the lambda
-            #36 invokestatic jdk8/byte_code/Example5.lambda$example$35:(Ljdk8/byte_code/Server;)LBoolean;
-            #35 ()LBoolean; // <-- signature and return type to be enforced at invocation time
+            #36 invokestatic Example5.lambda$example$35:(LServer;)LBoolean;
+            #35 ()LBoolean; // <-- type to be enforced at invocation time
 
 
 So like the anonymous class in example 2, an argument is added by the compiler to capture the term although this time, it's a method argument rather than a constructor argument.
 
+
+{pagebreak}
 
 ### Summary
 
