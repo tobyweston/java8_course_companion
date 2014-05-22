@@ -182,7 +182,7 @@ and we're done. A JVM method descriptor.
 
 Lets have a look at the bytecode produced for some examples.
 
-We're going to look at the bytecode for four distinct blocks of functionality based on the example we looked at in lambdas vs closures section.
+We're going to look at the bytecode for four distinct blocks of functionality based on the example we looked at in [lambdas vs closures](#lambdas_vs_closures) section.
 
 We'll explore
 
@@ -192,14 +192,48 @@ We'll explore
 1. A lambda with arguments
 1. A lambda closing over some variable (a new style closure)
 
+The example bytecode was generated using the `javap` command line tool. Only partial bytecode listings are shown in this section, for full source and bytecode listsings, see [Appendix A](#appendix_a).
 
 ### Example 1
 
-In the following examples examples the bytecode was generated using the `javap` command line tool.
 
-The first example is a simple anonymous class instance passed into our `waitFor` method. If we look at the bytecode, we can see two main blocks, the first is the default constructor that the compiler created. We're not interested in that. The second block is the bytecode for the `example` method. We are interested in that.
+The first example is a simple anonymous class instance passed into our `waitFor` method.
 
-The thing to note is that an instance of the anonymous class is new'ed up here. The #2 refers to a lookup, the result of which is shown in the comment. So it uses the `new` opcode with whatever is at #2 in the constant pool, this happens to be the class anonymous class.
+    public class Example1 {
+        // anonymous class
+        void example() throws InterruptedException {
+            waitFor(new Condition() {
+                @Override
+                public Boolean isSatisfied() {
+                    return true;
+                }
+            });
+        }
+    }
+
+If we look at the bytecode, the thing to notice is that an instance of the anonymous class is newed up. The #2 refers to a lookup, the result of which is shown in the comment. So it uses the `new` opcode with whatever is at #2 in the constant pool, this happens to be the class anonymous class.
+
+{lang="text"}
+      void example() throws java.lang.InterruptedException;
+        descriptor: ()V
+        flags:
+        Code:
+          stack=3, locals=1, args_size=1
+             0: new           #2  // class Example1$1 <- **class is instantiated here**
+             3: dup
+             4: aload_0
+             5: invokespecial #3  // Method Example1$1."<init>":(Ljdk8/byte_code/Example1;)V
+             8: invokestatic  #4  // Method WaitFor.waitFor:(Ljdk8/byte_code/Condition;)V
+            11: return
+          LineNumberTable:
+            line 10: 0
+            line 16: 11
+          LocalVariableTable:
+            Start  Length  Slot  Name   Signature
+                0      12     0  this   LExample1;
+        Exceptions:
+          throws java.lang.InterruptedException
+
 
 Once created, the constructor is called using `invokespecial`. This opcode is used to call constructor methods, private methods and accessible methods of a super class. You might notice the method descriptor includes a reference to `Example1`. All anonymous class instances have this implicit reference to the parent class.
 
