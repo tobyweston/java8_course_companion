@@ -13,7 +13,7 @@ It would look something like this.
         }
     });
 
-The `Comparator` instance here is a an abstract piece of the functionality; it means nothing on its only when it's used by the sort method that it has purpose.
+The `Comparator` instance here is a an abstract piece of the functionality; it means nothing on its own; it's only when it's used by the sort method that it has purpose.
 
 Using Java's new syntax, you can replace this with a lambda which looks like this
 

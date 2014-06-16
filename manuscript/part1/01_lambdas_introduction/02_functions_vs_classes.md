@@ -43,7 +43,7 @@ Where in the interest of completeness, a naive polling `waitFor` method might lo
 
 ### Some Theoretical Differences
 
-Firstly, both implementations are in-fact closures, the later is also a lambda. We'll look at this distinction in more detail later in the [lambdas vs. closures](#lambdas_vs_closures) section. This means that both have to capture their "environment" at runtime. In Java pre-8, this means copying the things the closure needs into an instance of an class (an anonymous instances of `Condition`). In our example, the `server` variable.
+Firstly, both implementations are in-fact closures, the latter is also a lambda. We'll look at this distinction in more detail later in the [lambdas vs. closures](#lambdas_vs_closures) section. This means that both have to capture their "environment" at runtime. In Java pre-8, this means copying the things the closure needs into an instance of an class (an anonymous instances of `Condition`). In our example, the `server` variable.
 
 As it's a copy, it has to be declared final to ensure that it can not be changed between when it's captured and when it's used. These two points in time could be very different given that closures are often used to defer execution until some later point (see [lazy evaluation](http://en.wikipedia.org/wiki/Lazy_evaluation) for example). Java 8 uses a neat trick whereby if it can reason that a variable is never updated, it might as well be final so it treats it as "effectively final" and you don't need to declare it as `final` explicitly.
 
