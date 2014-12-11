@@ -82,12 +82,14 @@ For example, this class shows that the lambda can reference the `firstName` vari
         public void example() {
             Function<String, String> addSurname = surname -> {
                 // equivalent to this.firstName
-                return firstName + " " + surname;
+                return firstName + " " + surname;  // or even, this.firstName
             };
         }
     }
 
-The anonymous class equivalent would need to explicitly refer to `firstName` from the enclosing scope.
+Here, `firstName` is shorthand for `this.firstName` and because `this` refers to the enclosing scope (the class `Example`), it's value will be "Jack".
+
+The anonymous class equivalent would need to explicitly refer to `firstName` from the enclosing scope. You can't use `this` as `this` in this context means the anonymous instance, and there is no `firstName` there. So, the following will compile.
 
 
     public class Example {
@@ -97,14 +99,60 @@ The anonymous class equivalent would need to explicitly refer to `firstName` fro
             Function<String, String> addSurname = new Function<String, String>() {
                 @Override
                 public String apply(String surname) {
-                    return Example.this.firstName + " " + surname;
+                    return Example.this.firstName + " " + surname;   // OK
                 }
             };
         }
     }
 
+but this will not.
 
-Shadowing also becomes much more straight forward to reason about (when referencing shadowed variables).
+    public class Example {
+        private String firstName = "Charlie";
+
+        public void anotherExample() {
+            Function<String, String> addSurname = new Function<String, String>() {
+                @Override
+                public String apply(String surname) {
+                    return this.firstName + " " + surname;   // compiler error
+                }
+            };
+        }
+    }
+
+You could still access the field directly (ie. simply calling `return firstName + " " + surname`) but you can't do so using `this`. The point here is to demonstrate the difference in capture schematics for `this` when used in lambdas vs. anonymous instances.
+
+Shadowing becomes much more straight forward to reason about (when referencing shadowed variables) with the simplified `this` semantics. For example,
+
+    public class ShadowingExample {
+
+        private String firstName = "Charlie";
+
+        public void shadowingExample(String firstName) {
+            Function<String, String> addSurname = surname -> {
+                return this.firstName + " " + surname;
+            };
+        }
+    }
+
+Here, because `this` is inside the lambda, it refers to the enclosing scope. So `this.firstName` will have the value "Charlie" and not the method parameter of the same name. The capture semantics make it clearer. If you use `firstName` (and drop the `this`), it will refer to the parameter.
+
+In the next example, using an anonymous instance, `firstName` simply refers to the parameter. If you want to refer to the enclosing version, you'd use `Example.this.firstName`.
+
+
+    public class ShadowingExample {
+
+        private String firstName = "Charlie";
+
+        public void anotherShadowingExample(String firstName) {
+            Function<String, String> addSurname = new Function<String, String>() {
+                @Override
+                public String apply(String surname) {
+                    return firstName + " " + surname;
+                }
+            };
+        }
+    }
 
 
 ### Summary
