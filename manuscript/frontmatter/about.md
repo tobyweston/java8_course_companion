@@ -1,7 +1,16 @@
-# About the Companion
+# About the Book
 
-This book is intended as a companion to my [Whats new in Java 8](https://www.udemy.com/whats-new-in-java-8) course available on [Udemy.com](https://www.udemy.com/whats-new-in-java-8).
+This book takes an in-depth look at lambdas and their supporting features; things like functional interfaces and type inference. 
 
-However, you don't have to watch the online course to make the most of this book. It's an independent read and contains all the examples from the course so you don't have watch the course.
+After reading the book, you'll;
 
-The book will help you get to grips with the new features of Java 8; lambdas and their impact as well as the new APIs and behind-the-scenes changes.
+* Have an overview of new features in Java 8
+* Understand lambdas in-depth, their background, syntax, implementation details and how and when to use them
+* Understand the difference between functions to classes and why that's relevant to lambdas
+* Understand the difference between lambdas and closures
+* Appreciate the improvements to type inference that drive a lot of the new features
+* Be able to use method references and understand scoping and "effectively final"
+* Understand the differences in bytecode produced when using lambdas
+* Be able to reason about exceptions and exception handling best practice when using lambdasvariables
+
+So whether you're migrating existing Java programs to Java 8 or building applications from scratch, this course and book will help you start to leverage the power of functional programming on the Java platform.
