@@ -1,4 +1,4 @@
-## Java 8 Features
+## Java 8
 
 It took two years, seven months, and eighteen days to get to the release Java 8. It was plagued with delays and technical problems but when it finally came, it represented one of the biggest shifts in Java since Java 5.
 
@@ -9,9 +9,9 @@ Although Java is not and never will be a pure functional programming language, J
 
 ### Features
 
-Lets take a whistle-stop tour of what's in the Java 8 release.
+A mostly-complete list of the new features of Java 8:
 
-* Lambda support finally comes to Java
+* Lambda support 
 * The core APIs have been updated to take advantage of lambdas, including the collection APIs and a new functional package to help build functional constructs.
 * Entirely new APIs have also been developed that use lambdas, things like the stream API which bring functional style processing of data.
     * For example, functions like `map` and `flatmap` from the stream API allow a declarative way to process lists and move away from external iteration to internal iteration. 
@@ -24,9 +24,8 @@ Lets take a whistle-stop tour of what's in the Java 8 release.
 * A new date and time API has been introduced.
 * The IO and NIO packages have welcome additions to allow you to work with IO streams using the new streams API.
 * Reflection and annotations have been improved.
-* If that's not enough, an entirely new JavaScript engine ships with Java 8. Nashorn replaced Rhino and is faster and has better support for ECMA-Script.
-* The JVM has had a bunch of improvements; it could be the fastest JVM to date as the integration with JRocket is now complete.
+* An entirely new JavaScript engine ships with Java 8. Nashorn replaces Rhino and is faster and has better support for ECMA-Script.
+* JVM improvements; it could be the fastest JVM to date as the integration with JRocket is now complete.
 * The JVM has dropped the idea of perm gen, instead using native OS memory for class metadata. This is a huge deal and should in theory mean better memory utilitsation.
-* The JRocket integration also brings Mission control to the JDK as standard. It compliments `jconsole` and `visualvm` with similar functionality but adds very inexpensive profiling.
-
-The list is almost endless, improvements to JavaFX, base64 encoding support and I'm sure I must have missed some out.
+* The JRocket integration also brings Mission control (`jmc`) to the JDK as standard. It compliments `jconsole` and `visualvm` with similar functionality but adds very inexpensive profiling.
+* Other miscalanous improvements, like improvements to JavaFX, base64 encoding support and more.
