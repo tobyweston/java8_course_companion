@@ -1,22 +1,26 @@
 
 ## λs in Functional Programming
 
-Before we look at things in a more depth, I want to give you some general background to lambdas.
+Before we look at things in a more depth, let's look at some general background to lambdas.
 
 If you haven't seen it before, the Greek letter `λ` ("lambda") is often used as shorthand when talking about lambdas.
 
+### 1930s and the Lambda Calculus
+
 In computer science, lambdas go back to the lambda-calculus. A mathematical notation for functions introduced by Alonzo Church in the 1930s. It was a way to explore mathematics using functions and was later re-discovered as a useful tool in computer science.
 
-It formalised the notion of "lambda terms" and rules to transform those terms. These rules or "functions" map directly into modern computer science ideas. All functions in the lambda-calculus are anonymous which again has been taken literally in computer science.
+It formalised the notion of _lambda terms_ and the rules to transform those terms. These rules or _functions_ map directly into modern computer science ideas. All functions in the lambda-calculus are anonymous which again has been taken literally in computer science.
 
 Here's an example of a lambda-calculus expression.
 
 {title="A lambda-calculus expression", lang="text", line-numbers="off"}
     λx.x+1
 
-We define an anonymous function or "lambda" with an argument `x`. The body follows the dot and adds one to that argument.
+This defines an anonymous function or _lambda_ with a single argument `x`. The body follows the dot and adds one to that argument.
 
-Then in the 1950s, John McCarthy invented LISP whilst at MIT. This was a programming language designed to model mathematical problems and was heavily influenced by the lambda-calculus.
+### 1950s and LISP
+
+In the 1950s, John McCarthy invented LISP whilst at MIT. This was a programming language designed to model mathematical problems and was heavily influenced by the lambda-calculus.
 
 It used the word `lambda` as an operator to define an anonymous function.
 
@@ -34,7 +38,7 @@ The lambda-calculus and LISP have had a huge influence on functional programming
 
 ### What is a Lambda
 
-In simple terms then, a lambda is just an anonymous function. That's it. Nothing special, it's just a compact way to define a function. Anonymous functions are useful when you want to pass around functionality. For example, passing functionality as a argument to a method.
+In simple terms then, a lambda is just an anonymous function. That's it. Nothing special. It's just a compact way to define a function. Anonymous functions are useful when you want to pass around fragments of reusable functionality. For example, passing functions into other functions.
 
 Many main stream languages already support lambdas including Scala, C#, Objective-C, Ruby, C++(11), Python and many others.
 
