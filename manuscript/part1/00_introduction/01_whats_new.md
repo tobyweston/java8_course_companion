@@ -1,6 +1,6 @@
 ## Java 8
 
-Java 8 was release on March 18, 2014, two years seven months after the previous release. It was plagued with delays and technical problems but when it finally came, it represented one of the biggest shifts in Java since Java 5.
+Java 8 was released on March 18, 2014, two years seven months after the previous release. It was plagued with delays and technical problems but when it finally came, it represented one of the biggest shifts in Java since Java 5.
 
 The headliners were of-course lambdas and and a retrofit to support functional programming ideas. With languages like Scala taking center stage and the modern trend towards functional programming, Java had to do something to keep up.
 
