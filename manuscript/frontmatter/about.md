@@ -11,6 +11,6 @@ After reading the book, you'll;
 * Appreciate the improvements to type inference that drive a lot of the new features
 * Be able to use method references and understand scoping and "effectively final"
 * Understand the differences in bytecode produced when using lambdas
-* Be able to reason about exceptions and exception handling best practice when using lambdasvariables
+* Be able to reason about exceptions and exception handling best practice when using lambdas
 
-So whether you're migrating existing Java programs to Java 8 or building applications from scratch, this course and book will help you start to leverage the power of functional programming on the Java platform.
+So whether you're migrating legacy Java programs to a more modern Java style or building applications from scratch, this book will help you start to leverage the power of functional programming on the Java platform.
