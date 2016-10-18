@@ -72,7 +72,7 @@ Another way to give the compiler the information it needs is just to assign the 
 
     Conversion b = (number) -> String.valueOf(number);
 
-and as a method reference;
+and as a method reference
 
     Conversion a = String::valueOf;
 
@@ -94,7 +94,7 @@ we can still assign the method reference (or lambda) to it.
 
 ### Method Reference Types
 
-There are four types of method reference;
+There are four types of method reference:
 
 * constructor references
 * static method references
@@ -238,7 +238,7 @@ Writing it out long hand, the compiler would generate this.
         PersonFactory factory = (a, b, c, d, e, f) -> new Person(a, b, c, d, e, f);
     }
 
-which could be used later like this;
+which could be used later like this:
 
     public void example() {
         PersonFactory factory = (a, b, c, d, e, f) -> new Person(a, b, c, d, e, f);
@@ -315,12 +315,12 @@ Here's an example of an instance method reference of a specific instance.
 
     x::toString
 
-The `x` is a specific instance that we want to get at. It's lambda equivalent looks like this;
+The `x` is a specific instance that we want to get at. It's lambda equivalent looks like this:
 
     () -> x.toString()
 
 
-The ability to reference the method of a specific instance also gives us a convenient way to convert between different functional interface types. For example;
+The ability to reference the method of a specific instance also gives us a convenient way to convert between different functional interface types. For example:
 
     Callable<String> c = () -> "Hello";
 
