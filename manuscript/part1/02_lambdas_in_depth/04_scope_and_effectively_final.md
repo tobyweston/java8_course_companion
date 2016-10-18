@@ -212,6 +212,4 @@ The trick around this is to use a object or an array; it's reference can remain 
     forEach(allPeople, x -> sum[0] += x);
 
 
-The array reference is indeed final here, but we can modify the array contents without reassigning the reference. However, this is generally bad form as it opens up to all the safety issues we talked about earlier. I wanted to mention it for illustration purposes but I don't recommend you do this kind of thing often. It's generally better not to create functions with side affects and you can avoid the issues completely if you use a more functional approach.
-
-The idiomatic way to do this kind of summing is to use what's called a "fold" or in the Java vernacular "reduce". We'll be looking at this in more detail when we look at streams and the 'java.util.function Package'.
+The array reference is indeed final here, but we can modify the array contents without reassigning the reference. However, this is generally bad form as it opens up to all the safety issues we talked about earlier. I wanted to mention it for illustration purposes but I don't recommend you do this kind of thing often. It's generally better not to create functions with side affects and you can avoid the issues completely if you use a more functional approach. A more idiomatic way to do this kind of summing is to use what's called a _fold_ or in the Java vernacular _reduce_.
