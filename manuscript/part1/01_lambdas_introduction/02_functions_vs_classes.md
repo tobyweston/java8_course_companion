@@ -1,13 +1,13 @@
 ## Functions vs classes {#functions_vs_classes}
 
-Bear in mind that an anonymous _function_ isn't the same as an anonymous _class_ in Java. An anonymous class in Java still needs to be instantiated to an object. It may not have a proper name but it's only as an _object_ that it can be useful.
+Bear in mind that an anonymous _function_ isn't the same as an anonymous _class_ in Java. An anonymous class in Java still needs to be instantiated to an object. It may not have a proper name but it's only when it's an _object_ that it can be useful.
 
 A _function_ on the other hand has no instance associated with it. Functions are disassociated with the data they act on whereas an object is intimately associated with the data it acts upon.
 
+You can use lambdas in Java 8 anywhere you would have previously used a [single method interface](#functional_interfaces) so it may just look like syntactic sugar but it's not. Let's have a look at how they differ and compare anonymous classes to lambdas; classes vs. functions.
+
 
 ### Lambdas in Java 8
-
-You can use lambdas in Java 8 anywhere you would have previously used a [single method interface](#functional_interfaces) so it may just look like syntactic sugar but it's not. Let's have a look at how they differ and compare anonymous classes to lambdas; classes vs. functions.
 
 A typical implementation of an anonymous class (a single method interface) in Java pre-8, might look something like this. The `anonymousClass` method is calling the `waitFor` method passing in some implementation of `Condition`, in this case it's saying wait for some server to have shutdown.
 
@@ -43,11 +43,11 @@ Where in the interest of completeness, a naive polling `waitFor` method might lo
 
 ### Some Theoretical Differences
 
-Firstly, both implementations are in-fact closures, the latter is also a lambda. We'll look at this distinction in more detail later in the [lambdas vs. closures](#lambdas_vs_closures) section. This means that both have to capture their "environment" at runtime. In Java pre-8, this means copying the things the closure needs into an instance of an class (an anonymous instances of `Condition`). In our example, the `server` variable.
+Firstly, both implementations are in-fact closures, the latter is also a lambda. We'll look at this distinction in more detail later in the [lambdas vs. closures](#lambdas_vs_closures) section. It means that both have to capture their "environment" at runtime. In Java pre-8, this means copying the things the closure needs into an instance of an class (an anonymous instances of `Condition`). In our example, the `server` variable would need to be copied into the instance.
 
-As it's a copy, it has to be declared final to ensure that it can not be changed between when it's captured and when it's used. These two points in time could be very different given that closures are often used to defer execution until some later point (see [lazy evaluation](http://en.wikipedia.org/wiki/Lazy_evaluation) for example). Java 8 uses a neat trick whereby if it can reason that a variable is never updated, it might as well be final so it treats it as "effectively final" and you don't need to declare it as `final` explicitly.
+As it's a copy, it has to be declared final to ensure that it can not be changed between when it's captured and when it's used. These two points in time could be very different given that closures are often used to defer execution until some later point (see [lazy evaluation](http://en.wikipedia.org/wiki/Lazy_evaluation) for example). Java 8 uses a neat trick whereby if it can reason that a variable is never updated, it might as well be final so it treats it as _effectively final_ and you don't need to declare it as `final` explicitly.
 
-A lambda on the other hand, doesn't need to copy it's environment or _capture any terms_. This means it can be treated as a genuine function and not an instance of a class. What's the difference? Plenty.
+A lambda on the other hand, doesn't need to copy it's environment or capture any terms. This means it can be treated as a genuine function and not an instance of a class. What's the difference? Plenty.
 
 
 ### Functions vs. Classes
@@ -58,11 +58,11 @@ For Java, this means that a lambda need not be instantiated every time it's eval
 
 In terms of some conceptual differences then;
 
-* Classes must be instantiated, whereas functions are not.
-* When classes are newed up, memory is allocated for the object.
-* Memory need only be allocated once for functions. They are stored in the "permanent" area of the heap.
-* Objects act on their own data, functions act on unrelated data.
-* Static class methods in Java are roughly equivalent to functions.
+* Classes must be instantiated, whereas functions are not
+* When classes are newed up, memory is allocated for the object
+* Memory need only be allocated once for functions. They are stored in the "permanent" area of the heap
+* Objects act on their own data, functions act on unrelated data
+* Static class methods in Java are roughly equivalent to functions
 
 
 ### Some Concrete Differences
