@@ -1,8 +1,8 @@
 ## λ Basic Syntax
 
-Let's jump in and have a look at the basic lambda syntax.
+Let's take a look at the basic lambda syntax.
 
-A lambda is basically an anonymous block of functionality. It's a lot like using an anonymous class instance. For example, if we want to sort an array in Java, we can use the `Arrays.sort` method which takes an instance of a `Comparator`.
+A lambda is basically an anonymous block of functionality. It's a lot like using an anonymous class instance. For example, if we want to sort an array in Java, we can use the `Arrays.sort` method which takes an instance of the `Comparator` interface.
 
 It would look something like this.
 
@@ -58,7 +58,7 @@ And to convert to a lambda, we basically trim the fat. We drop the instantiation
         body
     }
 
-we then introduce the new arrow symbol to indicate both that the whole thing is a lambda and that what follows is the body.
+we then introduce the new arrow symbol to indicate both that the whole thing is a lambda and that what follows is the body and that's our basic lambda syntax.
 
 
     (args) -> {
@@ -66,10 +66,7 @@ we then introduce the new arrow symbol to indicate both that the whole thing is 
     }
 
 
-and that's our basic lambda syntax.
-
-
-Let's take the sorting example from earlier through these steps. We start with the anonymous instance;
+Let's take the sorting example from earlier through these steps. We start with the anonymous instance:
 
 
     Arrays.sort(numbers, new Comparator<Integer>() {
@@ -107,7 +104,7 @@ and for simple expressions, you can drop the braces to produce a lambda expressi
     Arrays.sort(numbers, (first, second) -> first.compareTo(second));
 
 
-In this case, the compiler can infer enough to know what you mean. The single statement returns a value consistent with the interface, so it says, "no need to tell me that you're going to return something, I can see that for myself!".
+In this case, the compiler can infer enough to know what you mean. The single statement returns a value consistent with the interface, so it says, "no need to tell me that you're going to return something, I can see that for myself".
 
 
 For single argument interface methods, you can even drop the first brackets. For example the lambda taking an argument `x` and returning `x + 1`;
@@ -141,12 +138,12 @@ The first example (`(int x, int y) -> { return x + y; }`) is the most verbose wa
 
 You can often drop the types from the argument list, like `(x, y) -> { return x + y; }`. The compiler will use type inference here to try and guess the types. It does this based on the context that you're trying to use the lambda in.
 
-Ig your code block returns something or is a single line expression, you can drop the braces and return statement, for example `(x, y) -> x + y;`.
+If your code block returns something or is a single line expression, you can drop the braces and return statement, for example `(x, y) -> x + y;`.
 
 In the case of only a single argument, you can drop the parentheses `x -> x * 2`
 
 If you have no arguments at all, the 'hamburger' symbol is needed, `() -> System.out.println(“Hey there!”);`.
 
-In the interest of completeness, there is another variation; a kind of shortcut to a lambda called a "method reference". So this last one (`System.out::println;`) is actually a short cut to a lambda.
+In the interest of completeness, there is another variation; a kind of shortcut to a lambda called a _method reference_. An example is something like `System.out::println;`, which is basically a short cut to the lambda `(value -> System.out.prinltn(value)`.
 
-We're going to talk about those in more detail later, so for now, just be aware that they exist and can be used anywhere you can use a lambda.
+We're going to talk about method references in more detail later, so for now, just be aware that they exist and can be used anywhere you can use a lambda.
