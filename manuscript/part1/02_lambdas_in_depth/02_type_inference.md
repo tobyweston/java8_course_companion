@@ -1,6 +1,6 @@
 ## Type Inference Improvements
 
-There have been several type inference improvements in Java 8. Firstly to be able to support lambdas, the way the compiler infers things has been improved to use "target typing" extensively. Secondly, specific improvements were made over Java 7. These were managed under the Open JDK Enhancement Proposal 101.
+There have been several type inference improvements in Java 8. Firstly to be able to support lambdas, the way the compiler infers things has been improved to use _target typing_ extensively. Secondly, specific improvements were made over Java 7. These were managed under the Open JDK Enhancement Proposal 101.
 
 Before we get into those, lets recap on the basics.
 
@@ -74,7 +74,7 @@ For example, if we take an example functional interface.
     }
 
 
-When a lambda is used in-lieu of the interface, the first thing the compiler does is work out the "target" type of the lambda. So if we create a method `calculate` that takes the interface and two integers.
+When a lambda is used in-lieu of the interface, the first thing the compiler does is work out the _target_ type of the lambda. So if we create a method `calculate` that takes the interface and two integers.
 
     static Integer calculate(Calculation operation, Integer x, Integer y) {
         return operation.apply(x, y);
@@ -93,7 +93,7 @@ and use them like this
 
 The compiler understands that the lambdas `addition` and `subtraction` have a target type of `Calculation` (it's the only 'shape' that will fit the method signature of `calculate`). It can then use the method signature to infer the types of the lambda's parameters. There's only one method on the interface, so there's no ambiguity, the argument types are obviously `Integer`.
 
-We're going to look at lots of examples of target typing as we go on so I'm not going to say much more on this. Just be aware that the mechanism Java uses to achieve lots of the lambda goodness relies on improvements to type inference and this idea of a "target" type.
+We're going to look at lots of examples of target typing as we go on so I'm not going to say much more on this. Just be aware that the mechanism Java uses to achieve lots of the lambda goodness relies on improvements to type inference and this idea of a _target_ type.
 
 
 ### Type parameters in method calls
