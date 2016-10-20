@@ -60,7 +60,7 @@ In terms of some conceptual differences then;
 
 * Classes must be instantiated, whereas functions are not
 * When classes are newed up, memory is allocated for the object
-* Memory need only be allocated once for functions. They are stored in the "permanent" area of the heap
+* Memory need only be allocated once for functions. They are stored in the _permanent_ area of the heap
 * Objects act on their own data, functions act on unrelated data
 * Static class methods in Java are roughly equivalent to functions
 
@@ -69,7 +69,7 @@ In terms of some conceptual differences then;
 
 #### Capture Semantics
 
-Another difference is around capture semantics for `this`. In an anonymous class, `this` refers to the instance of the anonymous class. For example, `Foo$InnerClass` and not `Foo`. That's why you have crazy syntax like `Foo.this.x` when you refer to the enclosing scope from the anonymous class.
+Another difference is around capture semantics for `this`. In an anonymous class, `this` refers to the instance of the anonymous class. For example, `Foo$InnerClass` and not `Foo`. That's why you have slightly odd looking syntax like `Foo.this.x` when you refer to the enclosing scope from the anonymous class.
 
 In lambdas on the other hand, `this` refers to the enclosing scope (`Foo` directly in our example). In fact, lambdas are **entirely lexically scoped**, meaning they don't inherit any names from a super type or introduce a new level of scoping at all; you can directly access fields, methods and local variables from the enclosing scope.
 
@@ -89,7 +89,7 @@ For example, this class shows that the lambda can reference the `firstName` vari
 
 Here, `firstName` is shorthand for `this.firstName` and because `this` refers to the enclosing scope (the class `Example`), it's value will be "Jack".
 
-The anonymous class equivalent would need to explicitly refer to `firstName` from the enclosing scope. You can't use `this` as `this` in this context means the anonymous instance, and there is no `firstName` there. So, the following will compile.
+The anonymous class equivalent would need to explicitly refer to `firstName` from the enclosing scope. You can't use `this` as in this context, `this` means the anonymous instance and there is no `firstName` there. So, the following will compile:
 
 
     public class Example {
@@ -120,9 +120,12 @@ but this will not.
         }
     }
 
-You could still access the field directly (ie. simply calling `return firstName + " " + surname`) but you can't do so using `this`. The point here is to demonstrate the difference in capture schematics for `this` when used in lambdas vs. anonymous instances.
+You could still access the field directly (i.e. simply calling `return firstName + " " + surname`) but you can't do so using `this`. The point here is to demonstrate the difference in capture schematics for `this` when used in lambdas vs. anonymous instances.
 
-Shadowing becomes much more straight forward to reason about (when referencing shadowed variables) with the simplified `this` semantics. For example,
+
+#### Shadowed Variables
+
+Referencing shadowed variables becomes much more straight forward to reason about with the simplified `this` semantics. For example,
 
     public class ShadowingExample {
 
@@ -157,11 +160,11 @@ In the next example, using an anonymous instance, `firstName` simply refers to t
 
 ### Summary
 
-Functions in the academic sense are very different things from anonymous classes (which we often treat like functions in Java pre-8). It's useful to keep the distinctions in your head to be able to justify the use of Java 8 lambdas for something more than just their concise syntax. Of course, there's lots of additional advantages in using lambdas (not least the retrofit of the JDK to heavily use them).
+Functions in the academic sense are very different things from anonymous classes (which we often treat like functions in Java pre-8). It's useful to understand the distinctions to be able to justify the use of lambdas for something other than just their concise syntax. Of course, there's lots of additional advantages in using lambdas (not least the retrofit of the JDK to heavily use them).
 
 When we take a look at the new lambda syntax next, remember that although lambdas are used in a very similar way to anonymous classes in Java, they are technically different. Lambdas in Java need not be instantiated every time they're evaluated unlike an instance of an anonymous class.
 
-This should serve to remind you that lambdas in Java 8 are **not** just syntactic sugar.
+This should serve to remind you that lambdas in Java 8 are not just syntactic sugar.
 
 
 
