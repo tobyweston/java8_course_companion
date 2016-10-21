@@ -51,7 +51,7 @@ Here's the thing. As an author of the lambdas, I potentially have no idea how `r
     }
 
 
-In which case would mean that any exception in the first call would terminate the thread, the exception would disappear to the default exception handler and our original client code wouldn't get the chance to deal with the exception.
+In which case any exception in the first call would terminate the thread, the exception would disappear to the default exception handler and our original client code wouldn't get the chance to deal with the exception.
 
 
 ### Using a Callback
@@ -179,9 +179,9 @@ There's still one or two niggles though; we're throwing and catching a `RuntimeE
         }
     }
 
-I'll just have to go back and throw the new exception from within the lambdas.
+After we've modified the original lambda to throw the new exception, we can restrict the `catch` to deal with only exceptions we know about; namely the `InsufficientFundsRuntimeException`. 
 
-When we go back to modify the original code, we can restrict the final catch to deal with only exceptions we know about; namely the `InsufficientFundsRuntimeException`. I can now implement some kind of balance check and rollback functionality, confident that I know all the scenarios that cause it.
+We can now implement some kind of balance check and rollback functionality, confident that we understand all the scenarios that can cause it.
 
     public void transfer(BankAccount a, BankAccount b, Integer amount) {
         Runnable debit = () -> {
@@ -215,14 +215,14 @@ Let's name it `Callable` and its single method; `call`. Don't confuse this with 
         void call() throws E;
     }
 
-We'll change the old implementation of `transfer` and create lambdas to match the 'shape' of the new functional interface. I'll leave off the type for a moment.
+We'll change the old implementation of `transfer` and create lambdas to match the 'shape' of the new functional interface. I've left off the type for a moment.
 
     public void transfer(BankAccount a, BankAccount b, Integer amount) {
         ??? debit = () -> a.debit(amount);
         ??? credit = () -> b.credit(amount);
     }
 
-Remember from the type inference lecture that Java would be able to see this as a lambda of type `Callable` as it has no parameters and as does `Callable`, it has the same return type (none) and throws an exception of the same type as the interface. We just need to give the compiler a hint, so we can assign this to an instance of a `Callable`.
+Remember from the type inference section that Java would be able to see this as a type of `Callable` as it has no parameters as does `Callable`, it has the same return type (none) and throws an exception of the same type as the interface. We just need to give the compiler a hint, so we can assign this to an instance of a `Callable`.
 
     public void transfer(BankAccount a, BankAccount b, Integer amount) {
         Callable<InsufficientFundsException> debit = () -> a.debit(amount);
@@ -271,7 +271,7 @@ Once we put the exception handling back in we're back to a more concise method b
         }
     }
 
-The downside is this isn't a totally generalised solution; we'd still have to create variations of the `unchecked` method for different functions. We've also just hidden the verbose syntax away. The verbosity is still there its just been moved. Yes, we've got some reuse out of it but if exception handling were transparent or we didn't have checked exceptions, we wouldn't need to brush the issue under the carpet quiet so much.
+The downside is this isn't a totally generalised solution; we'd still have to create variations of the `unchecked` method for different functions. We've also just hidden the verbose syntax away. The verbosity is still there its just been moved. Yes, we've got some reuse out of it but if exception handling were transparent or we didn't have checked exceptions, we wouldn't need to brush the issue under the carpet quite so much.
 
 It's worth pointing out that we'd probably end up doing something similar if we were in Java 7 and using anonymous classes instead of lambdas. A lot of this stuff can still be done pre-Java 8 and you'll end up creating helper methods to push the verbosity to one side.
 
