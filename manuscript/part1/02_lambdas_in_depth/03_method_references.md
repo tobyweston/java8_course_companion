@@ -1,7 +1,7 @@
 
 ## Method References
 
-I mentioned earlier that method references are kind of like shortcuts to lambdas. They're a compact and convenient way to point to a method and _allow_ that method to be used anywhere a lambda would be used.
+I mentioned earlier that method references are kind of like shortcuts to lambdas. They're a compact and convenient way to point to a method and allow that method to be used anywhere a lambda would be used.
 
 When you create a lambda, you create an anonymous function and supply the method body. When you use a method reference as a lambda, it's actually pointing to a _named_ method that already exists; it already has a body.
 
@@ -21,7 +21,7 @@ The part preceding the double colon is the target reference and after, the metho
     public static String valueOf(Object obj) { ... }
 
 
-The double colon is called the delimiter, when we use it, we're not invoking the method, just _referencing_ it. So remember not to add brackets on the end.
+The double colon is called the _delimiter_. When we use it, we're not invoking the method, just _referencing_ it. So remember not to add brackets on the end.
 
     String::valueOf(); // <-- error
 
@@ -42,7 +42,7 @@ _We_ happen to know that this reference is equivalent to
 
     (x) -> String.valueOf(x)
 
-but the compiler doesn't know that yet. It _can_ tell some things though. It knows, that as a lambda, the return value should be of type `String` because all methods called `valueOf` in `String` return a string. But it has no idea what to supply as a argument. We need to give it a little help and give it some more context.
+but the compiler doesn't know that yet. It can tell some things though. It knows, that as a lambda, the return value should be of type `String` because all methods called `valueOf` in `String` return a string. But it has no idea what to supply as a argument. We need to give it a little help and give it some more context.
 
 We'll create a functional interface called `Conversion` that takes an integer and returns a `String`. This is going to be the target type of our lambda.
 
@@ -59,11 +59,11 @@ Next, we need to create a scenario where we use this as a lambda. So we create a
 
 Now, here's the thing. We've just given the compiler enough information to transform a method reference into the equivalent lambda.
 
-When we call `convert` method, we can do so with a lambda.
+When we call `convert` method, we can do so passing in a lambda.
 
     convert(100, (number) -> String.valueOf(number));
 
-And we can literally replace the lambda with a reference to the `valueOf` method. The compiler now knows we need a lambda that returns a `String` and takes an integer. It now knows that the `valueOf` method "fits" and can substitute the integer argument.
+And we can replace the lambda with a reference to the `valueOf` method. The compiler now knows we need a lambda that returns a `String` and takes an integer. It now knows that the `valueOf` method 'fits' and can substitute the integer argument.
 
     convert(100, String::valueOf);
 
@@ -77,11 +77,11 @@ and as a method reference
     Conversion a = String::valueOf;
 
 
-the "shapes" fit so it can be assigned.
+the 'shapes' fit, so it can be assigned.
 
 Interestingly, we can assign the same lambda to any interface that requires the same 'shape'. For example, if we have another functional interface with the same 'shape',
 
-Here `Example` returns a `String` and takes an `Object` so it has the same signature shape as `valueOf`.
+Here, `Example` returns a `String` and takes an `Object` so it has the same signature shape as `valueOf`.
 
     interface Example {
         String theNameIsUnimportant(Object object);
@@ -100,12 +100,13 @@ There are four types of method reference:
 * static method references
 * and two types of instance method references.
 
-The last two are a little confusing. The first is a method reference of a particular object and the second is a method reference of an _arbitrary_ object _but_ of a particular type. The difference is in how you want to use the method and if you _have_ the instance ahead of time or not.
+The last two are a little confusing. The first is a method reference of a particular object and the second is a method reference of an _arbitrary_ object _but_ of a particular type. The difference is in how you want to use the method and if you have the instance ahead of time or not.
 
 
 Firstly then, lets have a look at constrictor references.
 
 {pagebreak}
+
 
 ### Constructor reference
 
@@ -113,7 +114,7 @@ The basic syntax looks like this,
 
     String::new
 
-A _target_ type following by the double colon, followed by the `new` keyword. It's going to create a lambda that will call the zero argument constructor of the `String` class.
+A _target_ type followed by the double colon then the `new` keyword. It's going to create a lambda that will call the zero argument constructor of the `String` class.
 
 It's equivalent to this lambda
 
@@ -190,7 +191,7 @@ Let's take the example of a `Person` class, it looks like this and you can see t
         }
     }
 
-Going back to our example from earlier and looking at the general purpose `initialise` method, we could use a lambda like this
+Going back to our example from earlier and looking at the general purpose `initialise` method, we could use a lambda like this:
 
     initialise(people, () -> new Person(forename, surname, birthday,
                                         gender, email, age));
@@ -230,7 +231,7 @@ Here, the arguments from `PersonFactory` match the available constructor on `Per
 
 Notice I'm using the constructor reference from Person. The thing to note here is that a constructor reference can be assigned to a target functional interface even though we don't yet know the arguments.
 
-It probably seems a strange that the type of the method reference is `PersonFactory` and not `Person`. This extra target type information helps the compiler to know it has to go via `PersonFactory` to create a `Person`. With this extra hint, the compiler is able to create a lambda based on the factory interface that will _later_ create a `Person`.
+It may seem a bit strange that the type of the method reference is `PersonFactory` and not `Person`. This extra target type information helps the compiler to know it has to go via `PersonFactory` to create a `Person`. With this extra hint, the compiler is able to create a lambda based on the factory interface that will _later_ create a `Person`.
 
 Writing it out long hand, the compiler would generate this.
 
@@ -248,7 +249,7 @@ which could be used later like this:
 
 Fortunately, the compiler can do this for us once we've introduced the indirection.
 
-It understands the target type to use is `PersonFactory` and it understands that it's single abstract method can be used in lieu of a constructor. It's kind of like a two step process, firstly, to work out that the abstract method has the same argument list as a constructor and that it returns the right type, then apply it with colon colon `new` syntax.
+It understands the target type to use is `PersonFactory` and it understands that it's single abstract method can be used in-lieu of a constructor. It's kind of like a two step process, firstly, to work out that the abstract method has the same argument list as a constructor and that it returns the right type, then apply it with colon colon `new` syntax.
 
 To finish off the example, we need to tweak our initialise method to add the type information (replace the generics), add parameters to represent the person's details and actually invoke the factory.
 
@@ -286,7 +287,7 @@ A method reference can point directly to a static method. For example,
 
     String::valueOf
 
-This time, the left hand side refers to the type where a static method, in this case `valueOf` can be found. It's equivalent to this lambda
+This time, the left hand side refers to the type where a static method, in this case `valueOf`, can be found. It's equivalent to this lambda
 
     x -> String.valueOf(x))
 
@@ -324,7 +325,7 @@ The ability to reference the method of a specific instance also gives us a conve
 
     Callable<String> c = () -> "Hello";
 
-`Callable`'s functional method is `call`, when it's invoked the lambda will return "Hello".
+`Callable`'s functional method is `call`. When it's invoked the lambda will return "Hello".
 
 If we have another functional interface, `Factory`, we can convert the `Callable` using a method reference.
 
@@ -343,20 +344,28 @@ Here's an example of it in use.
 
 This is an example where the method reference is using a closure. It creates a lambda that will call the `toString` method on the instance `x`.
 
-The signature of `function` looks like this
+The signature and implementation of `function` above looks like this
 
     public static String function(Supplier<String> supplier) {
         return supplier.get();
     }
+    
+`Supplier` is a functional interface that looks like this
+    
+    @FunctionalInterface
+    public interface Supplier<T> {
+        T get();
+    }
 
-The `Supplier` interface must provide a string value (the `get` call) and the only way it can do that is if it's been supplied to it on construction. It's equivalent to
+
+When used in our `function`, it provides a string value (vai the call to `get`) and the only way it can do that is if the value has been supplied to it on construction. It's equivalent to
 
     public void example() {
         String x = "";
         function(() -> x.toString());
     }
 
-Notice here that the lambda has no arguments (it uses the "hamburger" symbol). This shows that the value of `x` isn't available in the lambda's local scope and so can only be available from outside it's scope. It's a closure because must close over `x`.
+Notice here that the lambda has no arguments (it uses the "hamburger" symbol). This shows that the value of `x` isn't available in the lambda's local scope and so can only be available from outside it's scope. It's a closure because must close over `x` (it will _capture_ `x`).
 
 If you're interested in seeing the long hand, anonymous class equivalent, it'll look like this. Notice again how `x` must be passed in.
 
@@ -382,7 +391,7 @@ The last case is for a method reference that points to an arbitrary object refer
 
     Object::toString
 
-So in this case, although it looks like the left hand side is pointing to a class, it's actually pointing to an instance. `toString` is an instance method on `Object`, not a static method. The reason why you might not use the regular instance method syntax is because you may not yet have an instance to refer to.
+So in this case, although it looks like the left hand side is pointing to a class (like the static method reference), it's actually pointing to an instance. `toString` is an instance method on `Object`, not a static method. The reason why you might not use the regular instance method syntax is because you may not yet have an instance to refer to.
 
 So before, when we call `x` colon colon `toString`, we know the value of `x`. There are some situations where you don't have a value of `x` and in these cases, you can still pass around a reference to the method but supply a value later using this syntax.
 
