@@ -22,7 +22,9 @@ You don't need to tell the compiler explicitly that the value is a string. It fi
 
 but there's no need.
 
-> As an aside, Scala also tries to figure out when you've finished a statement or expression based on it's _abstract syntax tree_ (AST). So often, you don't even need to add a terminating semi-colon.
+A>
+A> As an aside, Scala also tries to figure out when you've finished a statement or expression based on it's _abstract syntax tree_ (AST). So often, you don't even need to add a terminating semi-colon.
+A>
 
 
 ### Java Type Inference
