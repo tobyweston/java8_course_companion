@@ -79,7 +79,7 @@ and as a method reference
 
 the "shapes" fit so it can be assigned.
 
-Interestingly, we can assign the same lambda to any interface that requires the same "shape". For example, if we have another functional interface with the same "shape",
+Interestingly, we can assign the same lambda to any interface that requires the same 'shape'. For example, if we have another functional interface with the same 'shape',
 
 Here `Example` returns a `String` and takes an `Object` so it has the same signature shape as `valueOf`.
 
