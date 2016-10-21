@@ -21,7 +21,7 @@ A>
 A> As a quick side bar: Java's JIT compiler has enjoyed a great reputation over the years. But going back full circle to our introduction, it was John McCarthy that first wrote about JIT compilation way back in 1960. So it's interesting to think that it's not just lambda support that was influenced by LISP. ([Aycock 2003, 2. JIT Compilation Techniques, 2.1 Genesis, p. 98](http://user.it.uu.se/~kostis/Teaching/KT2-04/jit_survey.pdf)).
 A>
 
-The bytecode is the instruction set of the JVM. As it's name suggests, bytecode consists of single-byte instructions (called opcodes) along with associated bytes for parameters. There are therefore a possible 256 opcodes available although only about 200 are actually used.
+The bytecode is the instruction set of the JVM. As it's name suggests, bytecode consists of single-byte instructions (called _opcodes_) along with associated bytes for parameters. There are therefore a possible 256 opcodes available although only about 200 are actually used.
 
 The JVM uses a [stack based computation model](http://en.wikipedia.org/wiki/Model_of_computation), if we want to increment a number, we have to do it using the stack. All instructions or opcodes work against the stack.
 
@@ -59,7 +59,7 @@ the `+` operator is applied. Plus would pop the top two frames, add the numbers 
                     +---------+
 
 
-Each opcode works against the stack like this so we can translate our example into a sequence of bytecodes;
+Each opcode works against the stack like this so we can translate our example into a sequence of Java bytecodes:
 
 {lang="text"}
                     +---------+
@@ -103,7 +103,7 @@ and `add` becomes `iadd`.
                       |         |
                       +---------+
 
-`iconst_x` and `iadd` are examples of opcodes. Opcodes often have prefixes and/or suffices to indicate the types they work on, `i` in these examples refers to `integer`.
+`iconst_x` and `iadd` are examples of opcodes. Opcodes often have prefixes and/or suffices to indicate the types they work on, `i` in these examples refers to `integer`, `x` is an opcode specific suffix.
 
 We can group the opcodes into the following categories.
 
@@ -114,13 +114,19 @@ We can group the opcodes into the following categories.
 | Object interactions                         | `new`, `invokespecial`, `areturn`
 | Arithmetic, logic and type conversion       | `iadd`, `fcmpl`, `i2b`
 
-Instructions concerned with stack manipulation, like we've seen before. Examples being `aload`, `istore` etc. To control program flow with things like if and while, we use opcodes like `goto` and `if equal`. Creating objects and accessing methods use codes like `new` and `invokespecial`. We'll be particularly interested in this group when we look at the different opcodes used to invoke lambdas. The last group is about arithmetic, logic and type conversion and includes codes like `iadd`, float compare long (fcmpl) and integer to byte (`i2b`).
+Instructions concerned with stack manipulation, like `aload` and `istore`. 
+
+To control program flow with things like if and while, we use opcodes like `goto` and `if equal`. 
+
+Creating objects and accessing methods use codes like `new` and `invokespecial`. We'll be particularly interested in this group when we look at the different opcodes used to invoke lambdas. 
+
+The last group is about arithmetic, logic and type conversion and includes codes like `iadd`, float compare long (`fcmpl`) and integer to byte (`i2b`).
 
 
 
 ### Descriptors
 
-Opcodes will often use parameters, these look a little cryptic in the bytecode as they usually referenced via lookup tables. Internally, Java uses what's called "descriptors" to describe these parameters.
+Opcodes will often use parameters, these look a little cryptic in the bytecode as they're usually referenced via lookup tables. Internally, Java uses what's called _descriptors_ to describe these parameters.
 
 They describe types and signatures using a specific grammar you'll see throughout the bytecode. You'll often see the same grammar used in compiler or debug output, so it's useful to recap it here.
 
@@ -136,7 +142,7 @@ Have a look at breakdown of the descriptor syntax below. If you see an uppercase
 
 ![](images/descriptors.png)
 
-A couple of ones to mention;
+A couple of ones to mention:
 
  * classes are described with an uppercase `L` followed by the fully qualified class name, followed by a semi-colon. The class name is separated with slashes rather than the dots.
  * and arrays are described using an opening square bracket followed by a type from the list. No closing bracket.
@@ -191,7 +197,7 @@ We'll explore
 1. A lambda with arguments
 1. A lambda closing over some variable (a new style closure)
 
-The example bytecode was generated using the `javap` command line tool. Only partial bytecode listings are shown in this section, for full source and bytecode listsings, see [Appendix A](#appendix_a). Also, fully qualified class names have been shortened to better fit on the page.
+The example bytecode was generated using the `javap` command line tool. Only partial bytecode listings are shown in this section, for full source and bytecode listings, see [Appendix A](#appendix_a). Also, fully qualified class names have been shortened to better fit on the page.
 
 ### Example 1
 
@@ -210,7 +216,7 @@ The first example is a simple anonymous class instance passed into our `waitFor`
         }
     }
 
-If we look at the bytecode, the thing to notice is that an instance of the anonymous class is newed up at line 6. The #2 refers to a lookup, the result of which is shown in the comment. So it uses the `new` opcode with whatever is at #2 in the constant pool, this happens to be the anonymous class `Example$1`.
+If we look at the bytecode below, the thing to notice is that an instance of the anonymous class is newed up at line 6. The #2 refers to a lookup, the result of which is shown in the comment. So it uses the `new` opcode with whatever is at #2 in the constant pool, this happens to be the anonymous class `Example$1`.
 
 {lang="java", line-numbers="on"}
     void example() throws java.lang.InterruptedException;
@@ -236,7 +242,7 @@ If we look at the bytecode, the thing to notice is that an instance of the anony
 
 Once created, the constructor is called using `invokespecial` on line 9. This opcode is used to call constructor methods, private methods and accessible methods of a super class. You might notice the method descriptor includes a reference to `Example1`. All anonymous class instances have this implicit reference to the parent class.
 
-The next step uses 'invokestatic' to call our `waitFor` method passing in the anonymous class on line 10. `invokestatic` is used to call static methods and is very fast as it can direct dial a method rather than figure out which to call as would be the case in an object hierarchy.
+The next step uses `invokestatic` to call our `waitFor` method passing in the anonymous class on line 10. `invokestatic` is used to call static methods and is very fast as it can direct dial a method rather than figure out which to call as would be the case in an object hierarchy.
 
 
 ### Example 2
@@ -384,7 +390,7 @@ Interestingly, if we use a method reference instead, the functionality is exactl
         }
     }
 
-Via the call to the `LambdaMetafactory` when the final execution occurs, the method reference results in a call to `invokevirtual` rather than `invokestatic`. `invokevirtual` is used to call public, protected an package protected methods so it implies an instance is required. The instance is supplied to the `metafactory` method and no lambda (or static function) is needed at all; there are no `lambda$` in this bytecode.
+Via the call to the `LambdaMetafactory` when the final execution occurs, the method reference results in a call to `invokevirtual` rather than `invokestatic`. The `invokevirtual` opcode is used to call public, protected an package protected methods so it implies an instance is required. The instance is supplied to the `metafactory` method and no lambda (or static function) is needed at all; there are no `lambda$` in this bytecode.
 
 {lang="java", line-numbers="on"}
     void example() throws java.lang.InterruptedException;
