@@ -1,28 +1,28 @@
 ## Type Inference Improvements
 
-There have been several type inference improvements in Java 8. Firstly to be able to support lambdas, the way the compiler infers things has been improved to use _target typing_ extensively. Secondly, specific improvements were made over Java 7. These were managed under the Open JDK Enhancement Proposal 101.
+There have been several type inference improvements in Java 8. To be able to support lambdas, the way the compiler infers things has been improved to use _target typing_ extensively. This and other improvements over Java 7's inference were managed under the Open JDK Enhancement Proposal (JEP) 101.
 
 Before we get into those, lets recap on the basics.
 
 Type inference refers to the ability for a programming language to automatically deduce the type of an expression.
 
-Statically typed languages know the types of things only at _compile_ time. Dynamically typed languages know the types only at _runtime_. A statically typed language can use type inference and drop type information in source code and use the compiler to figure out what's missing.
+Statically typed languages know the types of things at _compile_ time. Dynamically typed languages know the types at _runtime_. A statically typed language can use type inference and drop type information in source code and use the compiler to figure out what's missing.
 
 ![](images/static_vs_dynamic.png)
 
-So this means that type inference can be used by statically typed languages, like Scala, to "look" like dynamic languages (like JavaScript). At least at the source code level.
+So this means that type inference can be used by statically typed languages (like Scala) to "look" like dynamic languages (like JavaScript). At least at the source code level.
 
 Here's an example of a line of code in Scala.
 
     val name = “Henry”
 
-It just doesn't need to tell the compiler explicitly that the value is a string. It figures it out. You could write it out explicitly like this,
+You don't need to tell the compiler explicitly that the value is a string. It figures it out. You could write it out explicitly like this,
 
-    val name : String = “Henry”
+    val name: String = “Henry”
 
 but there's no need.
 
-As an aside, Scala can usually figure out when you're finished, so you don't often have to add a terminating semi-colon.
+> As an aside, Scala also tries to figure out when you've finished a statement or expression based on it's _abstract syntax tree_ (AST). So often, you don't even need to add a terminating semi-colon.
 
 
 ### Java Type Inference
@@ -32,13 +32,13 @@ Type inference is a fairly broad topic, Java doesn't support the type of inferen
     String name = "Henry"; // <- we can't drop the String like Scala
 
 
-So Java doesn't support type inference in the widest sense. It can't guess _everything_ like some languages. Type inference for Java then typically refers to the way the compiler can work out types for generics. Java 7 improved this when it introduced the diamond operator (`<>`) but there are still lots of limitations in what Java _can_ figure out.
+So Java doesn't support type inference in the wider sense. It can't guess _everything_ like some languages. Type inference for Java then typically refers to the way the compiler can work out types for generics. Java 7 improved this when it introduced the diamond operator (`<>`) but there are still lots of limitations in what Java _can_ figure out.
 
-The Java compiler was built with type erasure; it actively removes the type information during compilation. For historical reasons, when generics were introduced in Java 5, the developers couldn't easily reverse the decision to use erasure. Java was left with the need to understand what types to substitute for a given generic type but no information how to do it because it had all been erased. Type inference was the solution.
+The Java compiler was built with type erasure; it actively removes the type information during compilation. Because of type erasure, `List<String>` becomes `List<Object>` after compilation. 
 
-Because of type erasure then, `List<String>` becomes `List<Object>` after compilation. The type information was erased.
+For historical reasons, when generics were introduced in Java 5, the developers couldn't easily reverse the decision to use erasure. Java was left with the need to understand what types to substitute for a given generic type but no information how to do it because it had all been erased. Type inference was the solution.
 
-All generic values are really of type `Object` behind the scenes but by using type inference, the compiler can check that all the usages are consistent with what it thinks the generic should be. At runtime, everything is going to get passed around as instances of `Object` with appropriate casting. Type inference just allows the compiler to check that the casts would be valid ahead of time.
+All generic values are really of type `Object` behind the scenes but by using type inference, the compiler can check that all the source code usages are consistent with what it thinks the generic should be. At runtime, everything is going to get passed around as instances of `Object` with appropriate casting behind the scenes. Type inference just allows the compiler to check that the casts would be valid ahead of time.
 
 
 So type inference is about guessing the types, Java's support for type inferences was due to be improved in a couple of ways with Java 8.
@@ -80,7 +80,7 @@ When a lambda is used in-lieu of the interface, the first thing the compiler doe
         return operation.apply(x, y);
     }
 
-and then create two lambdas; an addition and subtraction lambda
+and then create two lambdas; an addition and subtraction function
 
     Calculation addition = (x, y) -> x + y;
     Calculation subtraction = (x, y) -> x - y;
@@ -93,12 +93,12 @@ and use them like this
 
 The compiler understands that the lambdas `addition` and `subtraction` have a target type of `Calculation` (it's the only 'shape' that will fit the method signature of `calculate`). It can then use the method signature to infer the types of the lambda's parameters. There's only one method on the interface, so there's no ambiguity, the argument types are obviously `Integer`.
 
-We're going to look at lots of examples of target typing as we go on so I'm not going to say much more on this. Just be aware that the mechanism Java uses to achieve lots of the lambda goodness relies on improvements to type inference and this idea of a _target_ type.
+We're going to look at lots of examples of target typing so for now, just be aware that the mechanism Java uses to achieve lots of the lambda goodness relies on improvements to type inference and this idea of a _target_ type.
 
 
 ### Type parameters in method calls
 
-The were some situations prior to Java 8 where the compiler couldn't infer types. One of these was when calling methods with generics type parameters as arguments.
+The were some situations prior to Java 8 where the compiler couldn't infer types. One of these was when calling methods with generic type parameters as arguments.
 
 For example, the `Collections` class has a generified method for producing an empty list. It looks like this.
 
@@ -139,7 +139,7 @@ So it won't compile until we give it an extra hint using an explicit "type witne
 
 Now the compiler knows enough about what generic type is being passed into the method.
 
-The improvements in Java 8 include better support for this, so generally speaking where you would have needed a "type witness", you no longer do.
+The improvements in Java 8 include better support for this, so generally speaking where you would have needed a type witness, you no longer do.
 
 Our example of calling the `processNames` now compiles!
 
@@ -170,9 +170,3 @@ and we want to chain a call to add an element to the method creating an empty li
 This was due to be fixed in Java 8, but unfortunately it was dropped. So, at least for now, you'll still need to explicitly offer up a type to the compiler; you'll still need a type witness.
 
     List<String> list = List.<String>emptyList().add(":(");
-
-
-
-
-
-
