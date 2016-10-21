@@ -65,7 +65,6 @@ If you want to see this for yourself, you could use a method like the following 
 
 The output would look like this.
 
-{lang="text"}
     class scope        = 10
     method param scope = 20
     method scope       = 30
@@ -83,9 +82,9 @@ Lambda scoping should be intuitive if you're already familiar with basic Java sc
 
 In Java 7, any variable passed into an anonymous class instance would need to be made final.
 
-This is because the compiler actually copies all the context or _environment_ it needs into the instance of the anonymous class. If those values were to change under it, unexpected side affects could happen. So Java insists that the variable be final to ensure it doesn't change and the inner class can operate on them safely. By safely, I mean without race conditions or visibility problems between threads.
+This is because the compiler actually copies all the context or _environment_ it needs into the instance of the anonymous class. If those values were to change under it, unexpected side effects could happen. So Java insists that the variable be final to ensure it doesn't change and the inner class can operate on them safely. By safely, I mean without race conditions or visibility problems between threads.
 
-Let's have a look at an example. To start with we'll use Java 7 and create a method called `filter` that takes a list of people and a predicate. We'll create a temporary list to contain any matches we find then enumerate each element testing to see if the predicate holds true for each person. If the test is positive, we'll add them to the temporary list before returning all matches.
+Let's have a look at an example. To start with, we'll use Java 7 and create a method called `filter` that takes a list of people and a predicate. We'll create a temporary list to contain any matches we find then enumerate each element testing to see if the predicate holds true for each person. If the test is positive, we'll add them to the temporary list before returning all matches.
 
     // java 7
     private List<Person> filter(List<Person> people, Predicate<Person> predicate) {
@@ -145,7 +144,7 @@ I've been demonstrating the point here with an anonymous class examples because 
 
 You can still get round the safety net by passing in final objects or arrays and then change their internals in your lambda.
 
-For example, taking our list of people, lets say we want to sum all their ages. We could create a method to loop and sum like this;
+For example, taking our list of people, lets say we want to sum all their ages. We could create a method to loop and sum like this:
 
     private static int sumAllAges(List<Person> people) {
         int sum = 0;
@@ -155,9 +154,9 @@ For example, taking our list of people, lets say we want to sum all their ages. 
         return sum;
     }
 
-where the sum count is maintained as the list is enumerated. As an alternative, we could try and abstract the looping behaviour and pass in a function to be applied to each element. Like this.
+where the `sum` count is maintained as the list is enumerated. As an alternative, we could try and abstract the looping behaviour and pass in a function to be applied to each element. Like this.
 
-   public final static Integer forEach(List<Person> people, Function<Integer, Integer> function) {
+    public final static Integer forEach(List<Person> people, Function<Integer, Integer> function) {
         Integer result = null;
         for (Person t : people) {
             result = function.apply(t.getAge());
@@ -165,7 +164,7 @@ where the sum count is maintained as the list is enumerated. As an alternative, 
         return result;
     }
 
-and to achieve the summing behaviour, all we'd need to do is create a function that can sum. You could do this using an anonymous class like this;
+and to achieve the summing behaviour, all we'd need to do is create a function that can sum. You could do this using an anonymous class like this:
 
     private static void badExample() {
         Function<Integer, Integer> sum = new Function<Integer, Integer>() {
@@ -212,4 +211,4 @@ The trick around this is to use a object or an array; it's reference can remain 
     forEach(allPeople, x -> sum[0] += x);
 
 
-The array reference is indeed final here, but we can modify the array contents without reassigning the reference. However, this is generally bad form as it opens up to all the safety issues we talked about earlier. I wanted to mention it for illustration purposes but I don't recommend you do this kind of thing often. It's generally better not to create functions with side affects and you can avoid the issues completely if you use a more functional approach. A more idiomatic way to do this kind of summing is to use what's called a _fold_ or in the Java vernacular _reduce_.
+The array reference is indeed final here, but we can modify the array contents without reassigning the reference. However, this is generally bad form as it opens up to all the safety issues we talked about earlier. I mention it for illustration purposes but don't recommend you do this kind of thing often. It's generally better not to create functions with side effects and you can avoid the issues completely, if you use a more functional approach. A more idiomatic way to do this kind of summing is to use what's called a _fold_ or in the Java vernacular _reduce_.
