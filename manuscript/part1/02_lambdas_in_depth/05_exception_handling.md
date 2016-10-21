@@ -215,7 +215,7 @@ Let's name it `Callable` and its single method; `call`. Don't confuse this with 
         void call() throws E;
     }
 
-We'll change the old implementation of `transfer` and create lambdas to match the "shape" of the new functional interface. I'll leave off the type for a moment.
+We'll change the old implementation of `transfer` and create lambdas to match the 'shape' of the new functional interface. I'll leave off the type for a moment.
 
     public void transfer(BankAccount a, BankAccount b, Integer amount) {
         ??? debit = () -> a.debit(amount);
