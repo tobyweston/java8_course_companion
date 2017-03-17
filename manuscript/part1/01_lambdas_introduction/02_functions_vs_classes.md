@@ -67,6 +67,9 @@ In terms of some conceptual differences then;
 
 ### Some Concrete Differences
 
+Some concrete differences between functions and classes include their capture semantics and how they shadow variables.
+
+
 #### Capture Semantics
 
 Another difference is around capture semantics for `this`. In an anonymous class, `this` refers to the instance of the anonymous class. For example, `Foo$InnerClass` and not `Foo`. That's why you have slightly odd looking syntax like `Foo.this.x` when you refer to the enclosing scope from the anonymous class.
