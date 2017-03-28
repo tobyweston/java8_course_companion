@@ -57,10 +57,10 @@ A>
 A> Incidentally, we might have been able to use a method reference...
 A>
 A> ~~~~~~~~~~~~~~~
-A>    waitFor(new HttpServer(), HttpServer::isRunning); // nowhere do you put the !
+A>    waitFor(new HttpServer(), HttpServer::isRunning); // nowhere to put the !
 A> ~~~~~~~~~~~~~~~
 A>
-A> but we can't as we can't negate method references. You get a compile error.
+A> but unfortunately we can't negate method references. You'd get a compile error.
 A>
 
 
